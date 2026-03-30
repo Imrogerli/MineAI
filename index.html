@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>MineAI — Your AI Mines Knowledge. You Earn Rewards.</title>
+<meta name="description" content="Install MineAI in your favorite AI tool. Receive daily intelligence capsules. Earn points. Get airdrop rewards. The AI-native information network on Base."/>
+<meta name="keywords" content="MineAI, AI mining, daily capsule, airdrop, Base network, AI native, crypto, information, intelligence"/>
+<meta name="author" content="MineAI"/>
+<meta name="theme-color" content="#06b6d4"/>
+<meta property="og:title" content="MineAI — Your AI Mines Knowledge. You Earn Rewards." />
+<meta property="og:description" content="Install MineAI in your AI tool. Get daily intelligence. Earn points toward airdrop." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="MineAI — AI-Native Information Mining" />
+<meta name="twitter:description" content="Your AI delivers alpha. You earn rewards. Join the airdrop." />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>%E2%9A%A1</text></svg>" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{cyan:{50:'#ecfeff',100:'#cffafe',200:'#a5f3fc',300:'#67e8f9',400:'#22d3ee',500:'#06b6d4',600:'#0891b2',700:'#0e7490',800:'#155e75',900:'#164e63'},slate:{950:'#0a0f1a'}},fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','Fira Code','monospace']},animation:{'glow':'glow 3s ease-in-out infinite','float':'float 6s ease-in-out infinite','scan':'scan 3s linear infinite','pulse-ring':'pulseRing 2s ease-out infinite','ticker':'ticker 30s linear infinite'},keyframes:{glow:{'0%,100%':{opacity:'0.4'},'50%':{opacity:'1'}},float:{'0%,100%':{transform:'translateY(0)'},'50%':{transform:'translateY(-8px)'}},scan:{'0%':{transform:'translateY(-100%)'},'100%':{transform:'translateY(100%)'}},pulseRing:{'0%':{transform:'scale(0.8)',opacity:'1'},'100%':{transform:'scale(2.2)',opacity:'0'}},ticker:{'0%':{transform:'translateX(0)'},'100%':{transform:'translateX(-50%)'}}}}}};
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;overflow-x:hidden;background:#060a14;color:#e2e8f0}
+
+/* Grid background */
+.grid-bg{
+  background-image:
+    linear-gradient(rgba(6,182,212,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6,182,212,0.03) 1px, transparent 1px);
+  background-size:60px 60px;
+}
+
+/* Gradient text */
+.grad-text{background:linear-gradient(135deg,#22d3ee,#06b6d4,#0891b2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-text-warm{background:linear-gradient(135deg,#22d3ee,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* Hero glow */
+.hero-glow{position:relative}
+.hero-glow::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(6,182,212,0.12) 0%,rgba(6,182,212,0.04) 40%,transparent 70%);pointer-events:none}
+
+/* Cards */
+.glass-card{background:rgba(15,23,42,0.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(6,182,212,0.1);border-radius:16px;transition:all 0.3s ease}
+.glass-card:hover{border-color:rgba(6,182,212,0.3);box-shadow:0 0 30px rgba(6,182,212,0.08)}
+
+/* Capsule mockup */
+.capsule-card{background:linear-gradient(145deg,rgba(15,23,42,0.9),rgba(10,15,26,0.95));border:1px solid rgba(6,182,212,0.15);border-radius:20px;position:relative;overflow:hidden}
+.capsule-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(6,182,212,0.5),transparent)}
+
+/* Scan line effect */
+.scan-line{position:absolute;top:0;left:0;right:0;height:40px;background:linear-gradient(180deg,rgba(6,182,212,0.06),transparent);animation:scan 4s linear infinite;pointer-events:none}
+
+/* Pill badge */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:999px;font-size:0.75rem;font-weight:600;letter-spacing:0.02em}
+
+/* Number counter */
+.counter{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+
+/* Reveal animation */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:0.1s}.reveal-d2{transition-delay:0.2s}.reveal-d3{transition-delay:0.3s}.reveal-d4{transition-delay:0.4s}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#0a0f1a}
+::-webkit-scrollbar-thumb{background:#0e7490;border-radius:2px}
+
+/* Nav */
+nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+#mobile-menu{max-height:0;opacity:0;overflow:hidden;transition:max-height 0.3s ease,opacity 0.3s ease}
+#mobile-menu.open{max-height:320px;opacity:1}
+
+/* Platform icons */
+.platform-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:700;transition:all 0.3s}
+.platform-icon:hover{transform:scale(1.1)}
+
+/* Ticker */
+.ticker-wrap{overflow:hidden;white-space:nowrap}
+.ticker-content{display:inline-flex;gap:3rem;animation:ticker 30s linear infinite}
+
+/* Mobile */
+@media(max-width:640px){
+  .hero-glow::before{width:400px;height:300px}
+  h1{font-size:clamp(1.75rem,6vw,2.5rem)!important}
+  h2{font-size:clamp(1.5rem,5vw,2rem)!important}
+  .capsule-mockup{padding:1rem!important}
+}
+</style>
+</head>
+<body class="grid-bg">
+
+<!-- ===== NAV ===== -->
+<nav class="fixed top-0 inset-x-0 z-50 bg-[#060a14]/80 border-b border-cyan-900/20">
+  <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+      </div>
+      <span class="font-extrabold text-lg text-white tracking-tight">MineAI</span>
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+      <a href="#how" class="hover:text-cyan-400 transition-colors">How It Works</a>
+      <a href="#capsule" class="hover:text-cyan-400 transition-colors">Daily Capsule</a>
+      <a href="#points" class="hover:text-cyan-400 transition-colors">Points</a>
+      <a href="#platforms" class="hover:text-cyan-400 transition-colors">Platforms</a>
+    </div>
+    <a href="#join" class="hidden md:flex items-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm px-5 py-2.5 rounded-lg transition-all hover:shadow-lg hover:shadow-cyan-500/25">
+      Get Early Access
+    </a>
+    <button class="md:hidden p-2 text-slate-400" onclick="document.getElementById('mobile-menu').classList.toggle('open')">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div id="mobile-menu" class="md:hidden bg-[#060a14]/95 border-t border-cyan-900/20 px-5">
+    <div class="py-4 flex flex-col gap-4 text-sm font-medium text-slate-300">
+      <a href="#how" onclick="this.closest('#mobile-menu').classList.remove('open')">How It Works</a>
+      <a href="#capsule" onclick="this.closest('#mobile-menu').classList.remove('open')">Daily Capsule</a>
+      <a href="#points" onclick="this.closest('#mobile-menu').classList.remove('open')">Points</a>
+      <a href="#platforms" onclick="this.closest('#mobile-menu').classList.remove('open')">Platforms</a>
+      <a href="#join" class="bg-cyan-500 text-slate-950 font-bold px-5 py-2.5 rounded-lg text-center">Get Early Access</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero-glow min-h-screen flex flex-col items-center justify-center pt-24 pb-20 px-5 relative">
+  <div class="max-w-4xl mx-auto text-center relative z-10">
+    <!-- Badge -->
+    <div class="reveal flex justify-center mb-6">
+      <div class="pill bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+        AI-Native Information Mining on Base
+      </div>
+    </div>
+
+    <h1 class="reveal text-4xl sm:text-5xl md:text-7xl font-black text-white leading-[1.08] mb-6 tracking-tight">
+      Your AI delivers alpha.<br/><span class="grad-text">You earn rewards.</span>
+    </h1>
+
+    <p class="reveal text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+      Install MineAI in Claude, ChatGPT, or any AI tool you already use.
+      Receive a daily intelligence capsule. Read it. Earn points.
+      Redeem for <span class="text-cyan-400 font-semibold">$MINE</span> tokens at airdrop.
+    </p>
+
+    <!-- CTA buttons -->
+    <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+      <a href="#join" class="w-full sm:w-auto bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-base px-8 py-3.5 rounded-lg transition-all hover:shadow-xl hover:shadow-cyan-500/25 flex items-center justify-center gap-2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Start Mining — Free
+      </a>
+      <a href="#how" class="w-full sm:w-auto border border-slate-700 hover:border-cyan-800 text-slate-300 hover:text-cyan-400 font-semibold text-base px-8 py-3.5 rounded-lg transition-all flex items-center justify-center gap-2">
+        Learn How It Works
+      </a>
+    </div>
+
+    <!-- Live stats bar -->
+    <div class="reveal glass-card px-6 py-4 inline-flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+      <div class="text-center">
+        <div class="counter text-2xl font-bold text-white" id="stat-miners">12,847</div>
+        <div class="text-xs text-slate-500 mt-1">Active Miners</div>
+      </div>
+      <div class="w-px h-8 bg-slate-700 hidden sm:block"></div>
+      <div class="text-center">
+        <div class="counter text-2xl font-bold text-cyan-400" id="stat-capsules">384,210</div>
+        <div class="text-xs text-slate-500 mt-1">Capsules Delivered</div>
+      </div>
+      <div class="w-px h-8 bg-slate-700 hidden sm:block"></div>
+      <div class="text-center">
+        <div class="counter text-2xl font-bold text-white" id="stat-points">2.1M</div>
+        <div class="text-xs text-slate-500 mt-1">Points Distributed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section id="how" class="py-24 px-5">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4">Three steps. Thirty seconds a day.</h2>
+      <p class="reveal text-slate-400 text-lg max-w-xl mx-auto">No new app. No wallet setup. No learning curve. Just use your AI like you always do.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Step 1 -->
+      <div class="reveal glass-card p-8 relative group">
+        <div class="absolute top-6 right-6 counter text-5xl font-black text-cyan-500/10 group-hover:text-cyan-500/20 transition-colors">01</div>
+        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">Install the Skill</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Add MineAI to your Claude Desktop, ChatGPT, or any MCP-compatible AI tool. One config, done in 10 seconds.</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="reveal reveal-d1 glass-card p-8 relative group">
+        <div class="absolute top-6 right-6 counter text-5xl font-black text-cyan-500/10 group-hover:text-cyan-500/20 transition-colors">02</div>
+        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">Read Daily Capsule</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Every day your AI delivers a curated intelligence capsule — tech trends, market signals, opportunities. Takes 30 seconds to read.</p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="reveal reveal-d2 glass-card p-8 relative group">
+        <div class="absolute top-6 right-6 counter text-5xl font-black text-cyan-500/10 group-hover:text-cyan-500/20 transition-colors">03</div>
+        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3">Earn Points Daily</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Confirm you've read it. Earn points. Keep your streak alive for bonus multipliers. Redeem for $MINE at airdrop.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DAILY CAPSULE PREVIEW ===== -->
+<section id="capsule" class="py-24 px-5 relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <!-- Left: Text -->
+      <div>
+        <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-6 leading-tight">
+          Intelligence, <br/><span class="grad-text-warm">not noise.</span>
+        </h2>
+        <p class="reveal text-slate-400 text-lg mb-8 leading-relaxed">
+          AI scans thousands of sources 24/7 and distills the one thing you need to know today. Personalized to your interests — tech, business, markets, crypto, or all of the above.
+        </p>
+        <div class="reveal space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-cyan-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="text-slate-300 text-sm"><strong class="text-white">AI & Tech</strong> — Breakthrough tools, model releases, industry shifts</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-cyan-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="text-slate-300 text-sm"><strong class="text-white">Business & Startups</strong> — Opportunities, fundraising, market trends</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-cyan-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="text-slate-300 text-sm"><strong class="text-white">Web3 & Markets</strong> — On-chain alpha, whale moves, DeFi signals</p>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-cyan-500/15 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="text-slate-300 text-sm"><strong class="text-white">Global Trends</strong> — Macro events, policy changes, what matters</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Capsule Mockup -->
+      <div class="reveal reveal-d1">
+        <div class="capsule-card p-6 sm:p-8 capsule-mockup relative">
+          <div class="scan-line"></div>
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+              <span class="text-xs font-mono text-cyan-400">DAILY CAPSULE #47</span>
+            </div>
+            <span class="text-xs font-mono text-slate-600">2026-03-30</span>
+          </div>
+
+          <!-- Today's Highlight -->
+          <div class="mb-6">
+            <div class="pill bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-3">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26"/></svg>
+              TODAY'S HIGHLIGHT
+            </div>
+            <h4 class="text-white font-bold text-lg mb-2">Claude launches real-time web access for all users</h4>
+            <p class="text-slate-400 text-sm leading-relaxed">Anthropic just removed the biggest limitation of Claude — it can now browse the web in real time. This changes the competitive landscape for AI assistants overnight. If you're building AI-powered tools, your product roadmap probably needs a rethink today.</p>
+          </div>
+
+          <!-- Opportunity Signal -->
+          <div class="mb-6 p-4 rounded-xl bg-cyan-500/5 border border-cyan-500/10">
+            <div class="pill bg-cyan-500/10 text-cyan-300 border border-cyan-500/15 mb-3">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              OPPORTUNITY
+            </div>
+            <p class="text-slate-300 text-sm leading-relaxed">A new AI code editor "Windsurf" just raised $200M and is offering free pro accounts for early adopters. If you code, grab it before it's gone.</p>
+          </div>
+
+          <!-- Daily Poll -->
+          <div class="mb-5">
+            <div class="pill bg-violet-500/10 text-violet-300 border border-violet-500/15 mb-3">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              DAILY POLL
+            </div>
+            <p class="text-slate-300 text-sm mb-3">Will AI replace 50% of SaaS products within 2 years?</p>
+            <div class="flex gap-2">
+              <button class="flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-700 text-slate-400 hover:border-cyan-500 hover:text-cyan-400 transition-all">Yes</button>
+              <button class="flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-700 text-slate-400 hover:border-cyan-500 hover:text-cyan-400 transition-all">Partially</button>
+              <button class="flex-1 py-2 text-xs font-semibold rounded-lg border border-slate-700 text-slate-400 hover:border-cyan-500 hover:text-cyan-400 transition-all">No</button>
+            </div>
+          </div>
+
+          <!-- Bottom bar -->
+          <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Streak: 47 days
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-bold text-cyan-400">+15 pts</span>
+              <div class="w-5 h-5 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== POINTS SYSTEM ===== -->
+<section id="points" class="py-24 px-5">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4">Stack points. <span class="grad-text">Earn $MINE.</span></h2>
+      <p class="reveal text-slate-400 text-lg max-w-xl mx-auto">The earlier you join, the more you earn. Points convert to $MINE tokens at airdrop.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <!-- Daily Read -->
+      <div class="reveal glass-card p-6 text-center">
+        <div class="counter text-3xl font-black text-cyan-400 mb-2">+10</div>
+        <div class="text-white font-semibold text-sm mb-1">Daily Read</div>
+        <div class="text-slate-500 text-xs">Confirm you read the capsule</div>
+      </div>
+      <!-- Poll -->
+      <div class="reveal reveal-d1 glass-card p-6 text-center">
+        <div class="counter text-3xl font-black text-cyan-400 mb-2">+5</div>
+        <div class="text-white font-semibold text-sm mb-1">Daily Poll</div>
+        <div class="text-slate-500 text-xs">Answer the daily question</div>
+      </div>
+      <!-- 7-day Streak -->
+      <div class="reveal reveal-d2 glass-card p-6 text-center">
+        <div class="counter text-3xl font-black text-amber-400 mb-2">+50</div>
+        <div class="text-white font-semibold text-sm mb-1">7-Day Streak</div>
+        <div class="text-slate-500 text-xs">Bonus for weekly consistency</div>
+      </div>
+      <!-- Referral -->
+      <div class="reveal reveal-d3 glass-card p-6 text-center">
+        <div class="counter text-3xl font-black text-violet-400 mb-2">+100</div>
+        <div class="text-white font-semibold text-sm mb-1">Each Referral</div>
+        <div class="text-slate-500 text-xs">+ 2 pts/day from their activity</div>
+      </div>
+    </div>
+
+    <!-- Early bird notice -->
+    <div class="reveal mt-10 glass-card p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-cyan-500/20">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div>
+          <div class="text-white font-bold text-sm">Early Bird Multiplier Active</div>
+          <div class="text-slate-400 text-xs">First 10K users earn <span class="text-amber-400 font-bold">3x points</span>. Next 90K earn 2x. Don't wait.</div>
+        </div>
+      </div>
+      <a href="#join" class="flex-shrink-0 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 font-bold text-sm px-5 py-2.5 rounded-lg border border-amber-500/20 transition-all">
+        Claim 3x Now
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PLATFORMS ===== -->
+<section id="platforms" class="py-24 px-5 relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4">Works where you already are.</h2>
+      <p class="reveal text-slate-400 text-lg max-w-xl mx-auto">No new app to download. MineAI lives inside the AI tools you use every day.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="reveal glass-card p-6 flex flex-col items-center text-center group">
+        <div class="platform-icon bg-orange-500/10 border border-orange-500/20 text-orange-400 mb-4 group-hover:shadow-lg group-hover:shadow-orange-500/10">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5v-2.2l-3.5-1.8V10l3.5 1.8V9.6L7.5 7.8V5.2l4.5 2.3 4.5-2.3v2.6L13 9.6v2.2l3.5-1.8v3.5L13 15.3v2.2l4.5-2.3v2.6L12 20.1l-4.5-2.3v-2.6l3.5 2.3z"/></svg>
+        </div>
+        <h4 class="text-white font-bold text-sm mb-1">Claude Desktop</h4>
+        <p class="text-slate-500 text-xs">MCP Skill</p>
+      </div>
+
+      <div class="reveal reveal-d1 glass-card p-6 flex flex-col items-center text-center group">
+        <div class="platform-icon bg-green-500/10 border border-green-500/20 text-green-400 mb-4 group-hover:shadow-lg group-hover:shadow-green-500/10">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M22.2 1H1.8C.8 1 0 1.8 0 2.8v18.4c0 1 .8 1.8 1.8 1.8h20.4c1 0 1.8-.8 1.8-1.8V2.8c0-1-.8-1.8-1.8-1.8zM12 19.5c-2.1 0-4-.8-5.5-2.1l.8-.8c1.3 1.1 2.9 1.8 4.7 1.8s3.4-.7 4.7-1.8l.8.8c-1.5 1.3-3.4 2.1-5.5 2.1zm5.5-5h-11v-1.1h11v1.1zm0-3h-11V10.4h11v1.1zm0-3h-11V7.4h11v1.1z"/></svg>
+        </div>
+        <h4 class="text-white font-bold text-sm mb-1">ChatGPT</h4>
+        <p class="text-slate-500 text-xs">GPT Plugin</p>
+      </div>
+
+      <div class="reveal reveal-d2 glass-card p-6 flex flex-col items-center text-center group">
+        <div class="platform-icon bg-blue-500/10 border border-blue-500/20 text-blue-400 mb-4 group-hover:shadow-lg group-hover:shadow-blue-500/10">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h4 class="text-white font-bold text-sm mb-1">Web App</h4>
+        <p class="text-slate-500 text-xs">Browser</p>
+      </div>
+
+      <div class="reveal reveal-d3 glass-card p-6 flex flex-col items-center text-center group">
+        <div class="platform-icon bg-sky-500/10 border border-sky-500/20 text-sky-400 mb-4 group-hover:shadow-lg group-hover:shadow-sky-500/10">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.66-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.75 3.99-1.73 6.65-2.87 7.97-3.44 3.8-1.58 4.59-1.86 5.1-1.87.11 0 .37.03.54.17.14.12.18.28.2.47-.01.06.01.24 0 .38z"/></svg>
+        </div>
+        <h4 class="text-white font-bold text-sm mb-1">Telegram</h4>
+        <p class="text-slate-500 text-xs">Bot</p>
+      </div>
+    </div>
+
+    <!-- Install snippet -->
+    <div class="reveal mt-10 capsule-card p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-3 h-3 rounded-full bg-red-500/60"></div>
+        <div class="w-3 h-3 rounded-full bg-amber-500/60"></div>
+        <div class="w-3 h-3 rounded-full bg-green-500/60"></div>
+        <span class="text-xs font-mono text-slate-600 ml-2">claude_desktop_config.json</span>
+      </div>
+      <pre class="text-sm font-mono text-slate-300 overflow-x-auto"><code>{
+  <span class="text-cyan-400">"mcpServers"</span>: {
+    <span class="text-cyan-400">"MineAI"</span>: {
+      <span class="text-slate-500">"command"</span>: <span class="text-amber-300">"npx"</span>,
+      <span class="text-slate-500">"args"</span>: [<span class="text-amber-300">"mineai-mcp"</span>]
+    }
+  }
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AIRDROP TIMELINE ===== -->
+<section class="py-24 px-5">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4">Road to <span class="grad-text">$MINE</span></h2>
+      <p class="reveal text-slate-400 text-lg">Accumulate points now. Airdrop is coming.</p>
+    </div>
+
+    <div class="relative">
+      <!-- Vertical line -->
+      <div class="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-cyan-500/40 via-cyan-500/20 to-transparent"></div>
+
+      <!-- Phase 1 -->
+      <div class="reveal relative flex flex-col md:flex-row items-start mb-12 md:mb-16">
+        <div class="md:w-1/2 md:pr-12 md:text-right pl-16 md:pl-0">
+          <div class="pill bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-3 inline-flex">LIVE NOW</div>
+          <h3 class="text-white font-bold text-xl mb-2">Phase 1: Points Mining</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Install MineAI, receive daily capsules, earn points. Early bird 3x multiplier active for first 10K users.</p>
+        </div>
+        <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-6 h-6 rounded-full bg-cyan-500 border-4 border-[#060a14] shadow-lg shadow-cyan-500/30"></div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="reveal relative flex flex-col md:flex-row items-start mb-12 md:mb-16">
+        <div class="md:w-1/2"></div>
+        <div class="md:w-1/2 md:pl-12 pl-16">
+          <div class="pill bg-slate-700/50 text-slate-400 border border-slate-700 mb-3 inline-flex">Q2 2026</div>
+          <h3 class="text-white font-bold text-xl mb-2">Phase 2: Token Launch</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">$MINE token deploys on Base. Points snapshot taken. Airdrop distributed to all active miners based on total points.</p>
+        </div>
+        <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-6 h-6 rounded-full bg-slate-700 border-4 border-[#060a14]"></div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="reveal relative flex flex-col md:flex-row items-start">
+        <div class="md:w-1/2 md:pr-12 md:text-right pl-16 md:pl-0">
+          <div class="pill bg-slate-700/50 text-slate-400 border border-slate-700 mb-3 inline-flex">Q3 2026</div>
+          <h3 class="text-white font-bold text-xl mb-2">Phase 3: Premium & Data</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">Premium capsules with deeper alpha. Aggregated sentiment data marketplace launches. Ecosystem partnerships expand.</p>
+        </div>
+        <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-6 h-6 rounded-full bg-slate-700 border-4 border-[#060a14]"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA / JOIN ===== -->
+<section id="join" class="py-24 px-5 relative">
+  <div class="max-w-2xl mx-auto text-center">
+    <div class="reveal capsule-card p-10 sm:p-14 relative overflow-hidden">
+      <!-- Background glow -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center mx-auto mb-6 shadow-xl shadow-cyan-500/20">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-black text-white mb-4">Start mining today.</h2>
+        <p class="text-slate-400 text-base mb-8 max-w-md mx-auto">Join the early miners. Install MineAI in your AI tool, get your daily capsule, and stack points toward the $MINE airdrop.</p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+          <a href="#" class="w-full sm:w-auto bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-base px-8 py-3.5 rounded-lg transition-all hover:shadow-xl hover:shadow-cyan-500/25 flex items-center justify-center gap-2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            Install MineAI Skill
+          </a>
+          <a href="#" class="w-full sm:w-auto border border-slate-700 hover:border-slate-600 text-slate-300 font-semibold text-base px-8 py-3.5 rounded-lg transition-all flex items-center justify-center gap-2">
+            Read the Docs
+          </a>
+        </div>
+
+        <p class="text-xs text-slate-600">Free forever. No wallet required to start. Base chain.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="border-t border-slate-800/50 py-10 px-5">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 rounded-md bg-gradient-to-br from-cyan-400 to-cyan-600 flex items-center justify-center">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <span class="font-bold text-sm text-slate-400">MineAI</span>
+    </div>
+
+    <div class="flex items-center gap-6 text-sm text-slate-500">
+      <a href="#" class="hover:text-cyan-400 transition-colors">Docs</a>
+      <a href="#" class="hover:text-cyan-400 transition-colors">Twitter</a>
+      <a href="#" class="hover:text-cyan-400 transition-colors">Discord</a>
+      <a href="#" class="hover:text-cyan-400 transition-colors">GitHub</a>
+    </div>
+
+    <div class="text-xs text-slate-600">
+      Built on Base. Powered by AI.
+    </div>
+  </div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Counter animation
+function animateCounter(el, target, suffix = '') {
+  let start = 0;
+  const duration = 2000;
+  const startTime = performance.now();
+  function update(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const current = Math.floor(ease * target);
+    el.textContent = current.toLocaleString() + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const el = e.target;
+      const id = el.id;
+      if (id === 'stat-miners') animateCounter(el, 12847);
+      if (id === 'stat-capsules') animateCounter(el, 384210);
+      if (id === 'stat-points') animateCounter(el, 2.1, 'M');
+      counterObs.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter[id]').forEach(el => counterObs.observe(el));
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+</script>
+</body>
+</html>

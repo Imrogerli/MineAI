@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MineAI Whitepaper - AI-Native Information Mining Protocol</title>
+  <meta name="description" content="MineAI: The first AI-native information mining network on Base chain. Discover how we're transforming intelligence distribution through AI tool ecosystems.">
+  <meta name="og:title" content="MineAI Whitepaper">
+  <meta name="og:description" content="AI-native information mining protocol delivering personalized intelligence and rewarding user engagement.">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #060a14;
+      --bg-secondary: #0f1419;
+      --bg-tertiary: #1a1f2e;
+      --accent-cyan: #06b6d4;
+      --accent-cyan-light: #22d3ee;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-tertiary: #94a3b8;
+      --border-color: #1e293b;
+      --success: #10b981;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-cyan-light));
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.2s ease;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(6, 10, 20, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 100;
+      padding: 1rem 2rem;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-cyan-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--accent-cyan);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    /* Sidebar */
+    .toc-sidebar {
+      position: fixed;
+      left: 0;
+      top: 60px;
+      width: 280px;
+      height: calc(100vh - 60px);
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      padding: 2rem 1.5rem;
+      overflow-y: auto;
+      z-index: 99;
+    }
+
+    .toc-sidebar.mobile-hidden {
+      display: none;
+    }
+
+    .toc-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      margin-bottom: 1rem;
+    }
+
+    .toc-list {
+      list-style: none;
+    }
+
+    .toc-item {
+      margin-bottom: 0.5rem;
+    }
+
+    .toc-link {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-left: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .toc-link:hover {
+      color: var(--accent-cyan);
+      border-left-color: var(--accent-cyan);
+      padding-left: 1.25rem;
+    }
+
+    .toc-link.active {
+      color: var(--accent-cyan);
+      border-left-color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.1);
+    }
+
+    .toc-item.nested .toc-link {
+      padding-left: 2rem;
+      font-size: 0.85rem;
+    }
+
+    /* Main Content */
+    main {
+      margin-left: 280px;
+      margin-top: 60px;
+      padding: 3rem 2rem;
+    }
+
+    .content-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Hero Section */
+    .hero {
+      margin-bottom: 4rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-cyan-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 80px;
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--accent-cyan);
+    }
+
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 1rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    ul, ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    /* Content Blocks */
+    .highlight-block {
+      background: rgba(6, 182, 212, 0.05);
+      border-left: 4px solid var(--accent-cyan);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 0.5rem;
+    }
+
+    .highlight-block h4 {
+      color: var(--accent-cyan);
+      margin-top: 0;
+    }
+
+    .data-card {
+      background: var(--bg-tertiary);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border-color);
+      margin: 1.5rem 0;
+    }
+
+    .data-card.three-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .data-item {
+      padding: 1rem;
+      background: var(--bg-primary);
+      border-radius: 0.375rem;
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+
+    .data-label {
+      font-size: 0.875rem;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .data-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .data-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.75rem;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--bg-tertiary);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    thead {
+      background: var(--bg-secondary);
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      border-bottom: 2px solid var(--border-color);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    tr:hover {
+      background: rgba(6, 182, 212, 0.05);
+    }
+
+    /* Code/Mono */
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg-tertiary);
+      padding: 0.2rem 0.4rem;
+      border-radius: 0.25rem;
+      color: var(--accent-cyan-light);
+      font-size: 0.9em;
+    }
+
+    /* Lists with Icons */
+    .feature-list {
+      list-style: none;
+      margin-left: 0;
+    }
+
+    .feature-list li {
+      padding-left: 1.75rem;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .feature-list li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--accent-cyan);
+      font-weight: bold;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .toc-sidebar {
+        width: 240px;
+      }
+
+      main {
+        margin-left: 240px;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .hero h1 {
+        font-size: 2.25rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+      }
+
+      .mobile-menu-toggle {
+        display: block;
+      }
+
+      .toc-sidebar {
+        position: fixed;
+        left: -280px;
+        transition: left 0.3s ease;
+        width: 280px;
+      }
+
+      .toc-sidebar.mobile-open {
+        left: 0;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .toc-sidebar.mobile-hidden {
+        display: block;
+      }
+
+      main {
+        margin-left: 0;
+        padding: 2rem 1rem;
+      }
+
+      .content-container {
+        max-width: 100%;
+      }
+
+      .hero h1 {
+        font-size: 1.875rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      h3 {
+        font-size: 1.1rem;
+      }
+
+      .data-card.three-col {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 0.875rem;
+      }
+
+      th, td {
+        padding: 0.75rem 0.5rem;
+      }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-cyan);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+      padding: 3rem 2rem;
+      margin-top: 4rem;
+    }
+
+    .footer-content {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      color: var(--text-tertiary);
+    }
+
+    .footer-content p {
+      color: var(--text-tertiary);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-link {
+      color: var(--accent-cyan);
+      text-decoration: none;
+    }
+
+    .footer-link:hover {
+      color: var(--accent-cyan-light);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar"></div>
+
+  <header>
+    <div class="header-content">
+      <div class="logo">⛏ MineAI</div>
+      <button class="mobile-menu-toggle" id="menuToggle">☰</button>
+    </div>
+  </header>
+
+  <aside class="toc-sidebar mobile-hidden" id="tocSidebar">
+    <div class="toc-title">Contents</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#abstract" class="toc-link">Abstract</a></li>
+      <li class="toc-item"><a href="#problem" class="toc-link">The Problem</a></li>
+      <li class="toc-item"><a href="#solution" class="toc-link">The Solution</a></li>
+      <li class="toc-item"><a href="#architecture" class="toc-link">Product Architecture</a>
+        <ul class="toc-list">
+          <li class="toc-item nested"><a href="#multi-platform" class="toc-link">Multi-Platform Access</a></li>
+          <li class="toc-item nested"><a href="#content-engine" class="toc-link">AI Content Engine</a></li>
+          <li class="toc-item nested"><a href="#points-system" class="toc-link">Points & Identity</a></li>
+        </ul>
+      </li>
+      <li class="toc-item"><a href="#tokenomics" class="toc-link">Token Economics</a>
+        <ul class="toc-list">
+          <li class="toc-item nested"><a href="#token-overview" class="toc-link">Token Overview</a></li>
+          <li class="toc-item nested"><a href="#distribution" class="toc-link">Distribution</a></li>
+          <li class="toc-item nested"><a href="#utility" class="toc-link">Utility</a></li>
+        </ul>
+      </li>
+      <li class="toc-item"><a href="#growth" class="toc-link">Growth Strategy</a></li>
+      <li class="toc-item"><a href="#tech" class="toc-link">Technical Architecture</a></li>
+      <li class="toc-item"><a href="#roadmap" class="toc-link">Roadmap</a></li>
+      <li class="toc-item"><a href="#team" class="toc-link">Team</a></li>
+      <li class="toc-item"><a href="#conclusion" class="toc-link">Conclusion</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <div class="content-container">
+      <!-- Hero -->
+      <div class="hero">
+        <h1>MineAI</h1>
+        <p>The AI-Native Information Mining Protocol<br>Transforming Intelligence Distribution Through AI Tool Ecosystems</p>
+      </div>
+
+      <!-- Abstract -->
+      <section id="abstract">
+        <h2>1. Abstract</h2>
+        <p>MineAI is an AI-native information mining protocol that transforms how people consume intelligence in the AI era. By embedding directly into users' existing AI tools (Claude, ChatGPT, and any MCP-compatible client), MineAI delivers personalized daily intelligence capsules and rewards users with $MINE tokens for their engagement.</p>
+
+        <p>Built on Base, MineAI is the first protocol to leverage AI tool ecosystems as a distribution channel for Web3 user acquisition. Rather than competing for attention in crowded app stores and social feeds, MineAI meets users where they already spend hours each day: inside their AI assistants.</p>
+
+        <div class="highlight-block">
+          <h4>Key Innovation</h4>
+          <p>Traditional startups acquire Web3 users through airdrops to bots and mercenary investors. MineAI inverts this model: by delivering genuine value (curated intelligence) directly through AI tools, we acquire highly engaged users organically. The protocol then converts this engagement into ownership through points-based mining.</p>
+        </div>
+
+        <h3>Why Now?</h3>
+        <p>Three critical shifts make MineAI possible in 2026:</p>
+        <ul class="feature-list">
+          <li><strong>MCP Protocol Maturity:</strong> Tool-use has become standardized. Claude, ChatGPT, and hundreds of applications now speak the same protocol, enabling single-source deployment to millions.</li>
+          <li><strong>Information Crisis:</strong> As AI proliferates, information overload has become acute. Users face thousands of sources with no intelligent curation—exactly the pain MineAI solves.</li>
+          <li><strong>AI Agent Economics:</strong> With AI agents capable of autonomous content generation, aggregation, and delivery 24/7, the marginal cost of serving intelligence approaches zero.</li>
+        </ul>
+      </section>
+
+      <!-- Problem -->
+      <section id="problem">
+        <h2>2. The Problem</h2>
+
+        <h3>Information Overload Without Curation</h3>
+        <p>In the AI era, information abundance has become a curse. A typical knowledge worker today faces:</p>
+        <ul>
+          <li>Hundreds of news sources, blogs, and research papers daily</li>
+          <li>Thousands of crypto/web3 opportunities and signals</li>
+          <li>No intelligent filtering mechanism adapted to individual interests</li>
+          <li>Decision fatigue from signal-to-noise ratio that often exceeds 1:100</li>
+        </ul>
+
+        <p>Existing solutions—Twitter feeds, Reddit communities, Discord channels—offer some curation but lack personalization, real-time quality assessment, and integration into the tools where users actually work.</p>
+
+        <h3>AI Tools Are Powerful But Passive</h3>
+        <p>Claude, ChatGPT, and similar assistants have become essential infrastructure for knowledge workers. Yet they're fundamentally reactive:</p>
+        <ul>
+          <li>Users must prompt them with specific questions</li>
+          <li>They cannot proactively deliver time-sensitive intelligence</li>
+          <li>No mechanism to surface opportunities aligned with user interests</li>
+          <li>Value creation is one-off rather than habitual engagement</li>
+        </ul>
+
+        <p>This represents a massive opportunity: what if the tools people use daily could simultaneously deliver curated intelligence, personalized to their interests?</p>
+
+        <h3>Web3 Acquisition Is Broken</h3>
+        <p>Current Web3 user acquisition relies on:</p>
+        <ul>
+          <li><strong>Airdrops:</strong> Massive retroactive distributions to address lists, incentivizing bot behavior rather than genuine engagement</li>
+          <li><strong>Mercenary Capital:</strong> Users who accumulate tokens, then sell immediately</li>
+          <li><strong>Unsustainable Economics:</strong> Projects spend millions on token incentives to acquire users with near-zero lifetime value</li>
+          <li><strong>No Distribution Channel:</strong> Without paid user acquisition, Web3 projects struggle to reach audiences at scale</li>
+        </ul>
+
+        <p>The cost per user acquired has skyrocketed; the quality of those users has collapsed. This is an industrial problem requiring a new approach.</p>
+
+        <h3>The Bridge Gap</h3>
+        <p>Billions of AI tool users exist, but few have ever heard of Web3. Simultaneously, Web3 has built sophisticated protocols with real utility that could benefit from larger user bases. Yet no mechanism exists to bridge these worlds:</p>
+        <ul>
+          <li>Web2 AI users don't know where to find crypto opportunities</li>
+          <li>Crypto protocols lack cost-effective distribution to mainstream users</li>
+          <li>Existing bridges (crypto news sites, Discord) are siloed and require users to explicitly seek them out</li>
+        </ul>
+      </section>
+
+      <!-- Solution -->
+      <section id="solution">
+        <h2>3. The MineAI Solution</h2>
+
+        <h3>Core Thesis</h3>
+        <p><strong>Distribution through AI tools is the killer app for Web3 user acquisition.</strong> By embedding directly into the products users already open daily, MineAI solves the bridge problem while delivering genuine value that justifies user attention.</p>
+
+        <h3>Four Pillars</h3>
+
+        <h4>1. AI-Native Distribution</h4>
+        <p>Unlike traditional apps that compete for app store real estate and notification space, MineAI lives inside tools users already use for work. Integration points include:</p>
+        <ul class="feature-list">
+          <li><strong>Claude Desktop / Cursor / Windsurf:</strong> MCP Server deploys to all MCP-compatible clients instantly</li>
+          <li><strong>ChatGPT:</strong> Native plugin for direct integration</li>
+          <li><strong>Telegram:</strong> Bot accessible without any technical friction</li>
+          <li><strong>Web App:</strong> Fallback and native interface</li>
+        </ul>
+        <p>A single codebase deployed across all platforms reaches millions without marketing friction.</p>
+
+        <h4>2. Daily Intelligence Capsule</h4>
+        <p>Each day, users receive one curated intelligence brief, personalized to their interests. The capsule consists of:</p>
+        <ul class="feature-list">
+          <li><strong>Today's Highlight:</strong> The single most important market signal or opportunity</li>
+          <li><strong>Opportunity Signal:</strong> 3-5 emerging opportunities in the user's interest areas (AI, DeFi, web3 governance, etc.)</li>
+          <li><strong>Daily Poll:</strong> One question inviting users to share their perspective</li>
+        </ul>
+        <p>The capsule is generated fresh daily by AI, curated for quality, personalized based on user preferences, and delivered proactively. No app open required—the value comes to the user.</p>
+
+        <h4>3. Points-Based Mining</h4>
+        <p>Users earn points for engagement, with no capital requirement:</p>
+        <ul class="feature-list">
+          <li>Read the daily capsule: +10 points</li>
+          <li>Answer the daily poll: +5 points</li>
+          <li>Maintain a 7-day streak: +50 point bonus</li>
+          <li>Maintain a 30-day streak: +300 point bonus</li>
+          <li>Refer a friend: +100 points, plus +2/day ongoing</li>
+        </ul>
+        <p>Early users benefit from multipliers (3x for first 10K users, 2x for next 90K), creating urgency while rewarding early adoption. Points accumulate toward an eventual airdrop of $MINE tokens.</p>
+
+        <h4>4. Seamless Web2 → Web3 Bridge</h4>
+        <p>Users start without wallets. They engage purely for the intelligence value and points. When ready, users can:</p>
+        <ul class="feature-list">
+          <li>Connect a wallet (including non-custody options)</li>
+          <li>Claim their airdrop snapshot at any time</li>
+          <li>Access token utility features (premium content, data marketplace)</li>
+        </ul>
+        <p>No friction, no requirement, but a natural path toward Web3 for users who want it.</p>
+
+        <div class="highlight-block">
+          <h4>The Flywheel</h4>
+          <p>More users → More engagement data → Better personalization → Higher retention → Higher points earning → Stronger FOMO at airdrop → Higher wallet adoption → Token utility increases demand → More incentive to build on protocol → New products attract more users.</p>
+        </div>
+      </section>
+
+      <!-- Architecture -->
+      <section id="architecture">
+        <h2>4. Product Architecture</h2>
+
+        <p>MineAI's architecture consists of four integrated layers: Access, Content, Mining, and Blockchain.</p>
+
+        <section id="multi-platform">
+          <h3>4.1 Multi-Platform Access Layer</h3>
+
+          <p>Users interact with MineAI through whichever tool they prefer. All platforms share unified identity and points accounting:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Platform</th>
+                <th>Technology</th>
+                <th>User Base</th>
+                <th>Key Benefit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Claude Desktop</td>
+                <td>MCP Server</td>
+                <td>500K+ active</td>
+                <td>Integrated into primary AI assistant</td>
+              </tr>
+              <tr>
+                <td>Cursor / Windsurf</td>
+                <td>MCP Protocol</td>
+                <td>200K+ developers</td>
+                <td>Embedded in IDE workflows</td>
+              </tr>
+              <tr>
+                <td>ChatGPT</td>
+                <td>Native Plugin</td>
+                <td>100M+ monthly users</td>
+                <td>Largest AI tool audience</td>
+              </tr>
+              <tr>
+                <td>Telegram Bot</td>
+                <td>Telegram API</td>
+                <td>900M+ registered users</td>
+                <td>Lowest friction entry point</td>
+              </tr>
+              <tr>
+                <td>Web App</td>
+                <td>Next.js + React</td>
+                <td>Direct users</td>
+                <td>Native interface, progressive Web3</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Technical Design</h4>
+          <p>All platforms communicate with a unified backend API. User authentication uses wallet signatures (optional) or Web3auth for seamless onboarding. Session tokens expire after 30 days of inactivity, requiring re-authentication. This design prevents account takeover while preserving frictionless access.</p>
+
+          <p>The MCP Server is the reference implementation. It exposes the following tools to Claude and compatible clients:</p>
+          <ul class="feature-list">
+            <li><code>get_daily_capsule()</code> — Fetch today's curated intelligence</li>
+            <li><code>confirm_read(capsule_id)</code> — Mark capsule as read, claim +10 points</li>
+            <li><code>answer_poll(capsule_id, response)</code> — Submit poll response, claim +5 points</li>
+            <li><code>get_points_balance()</code> — Check current point balance</li>
+            <li><code>get_referral_code()</code> — Generate personal referral link</li>
+            <li><code>get_streak_info()</code> — Check current streak and bonus countdown</li>
+          </ul>
+        </section>
+
+        <section id="content-engine">
+          <h3>4.2 AI Content Engine</h3>
+
+          <p>The intelligence behind MineAI is a sophisticated content pipeline that runs 24/7, analyzing thousands of data sources and distilling insights for human consumption.</p>
+
+          <h4>Data Ingestion (Hourly)</h4>
+          <ul>
+            <li>100+ RSS feeds (news, research, blogs)</li>
+            <li>CoinGecko API (top 500 tokens by market cap changes)</li>
+            <li>DeFiLlama API (protocol TVL movements, new listings)</li>
+            <li>Twitter/X API (trending topics, influential accounts in AI/crypto)</li>
+            <li>On-chain data (whale transfers, smart contract events)</li>
+            <li>Venture capital (new funding announcements, VC follows)</li>
+          </ul>
+
+          <h4>AI Summarization & Curation</h4>
+          <p>Raw data flows into Claude API (Sonnet model for speed). The AI:</p>
+          <ul>
+            <li>Extracts key facts and implications from each source</li>
+            <li>Scores events by impact (market significance, opportunity type, urgency)</li>
+            <li>Deduplicates similar stories</li>
+            <li>Detects emerging trends (when 5+ sources mention the same topic within 6 hours)</li>
+            <li>Filters for signal quality (removes sensationalism, FUD, and low-impact noise)</li>
+          </ul>
+
+          <h4>Personalization Engine</h4>
+          <p>During onboarding, users select interest areas from: AI & ML, DeFi & Trading, Web3 Governance, NFTs & Culture, Layer 2s, Regulation & Policy, Developer Tools, Global Macro. Users can follow up to 5 topics.</p>
+
+          <p>The personalization engine uses collaborative filtering combined with explicit topic scoring:</p>
+          <ul>
+            <li>Match curated stories to user interest tags</li>
+            <li>Boost signals related to trending topics in user's areas</li>
+            <li>Learn from poll responses: if user consistently engages with certain signal types, increase their weight</li>
+            <li>Weekly: Send engagement metrics (read time, poll participation) back to content model for fine-tuning</li>
+          </ul>
+
+          <h4>Three-Tier Content Model</h4>
+          <div class="data-card">
+            <strong style="color: var(--accent-cyan);">Today's Highlight</strong>
+            <p style="margin-top: 0.5rem;">The single most important signal identified across all sources. Curated by highest impact score + personalization relevance. 2-3 sentence executive summary + source link.</p>
+          </div>
+
+          <div class="data-card">
+            <strong style="color: var(--accent-cyan);">Opportunity Signals (3-5 items)</strong>
+            <p style="margin-top: 0.5rem;">Emerging opportunities in user's interest areas. Each includes: 1-sentence premise, why it matters, key metric to watch, confidence level (High/Medium/Low), and action link (research page or website).</p>
+          </div>
+
+          <div class="data-card">
+            <strong style="color: var(--accent-cyan);">Daily Poll</strong>
+            <p style="margin-top: 0.5rem;">One question inviting user perspective. Examples: "Will AI regulation tighten in 2026?" (Yes/No/Unsure), "Which L2 will capture 50% of Ethereum throughput?" (Arbitrum/Optimism/Base/Other), "Should DAOs adopt token lock-up periods?"</p>
+          </div>
+
+          <h4>Quality Assurance</h4>
+          <p>Every capsule undergoes automated checks:</p>
+          <ul>
+            <li>Source credibility scoring (published outlets > anonymous sources)</li>
+            <li>Fact verification against recent blockchain data</li>
+            <li>Tone analysis (reject clickbait and FUD)</li>
+            <li>Diversity check (ensure content isn't concentrated in single source)</li>
+            <li>Time-sensitivity filter (favor signals with action windows &lt; 7 days)</li>
+          </ul>
+
+          <p>Human editorial review is performed daily at 8 AM UTC on the generated capsule, with ability to override AI selections or add breaking news.</p>
+        </section>
+
+        <section id="points-system">
+          <h3>4.3 Points & Identity System</h3>
+
+          <h4>Points Accumulation Mechanics</h4>
+          <div class="data-card three-col">
+            <div class="data-item">
+              <div class="data-label">Daily Read</div>
+              <div class="data-value">+10</div>
+              <div class="data-desc">Open and read today's capsule</div>
+            </div>
+            <div class="data-item">
+              <div class="data-label">Daily Poll</div>
+              <div class="data-value">+5</div>
+              <div class="data-desc">Answer the daily poll question</div>
+            </div>
+            <div class="data-item">
+              <div class="data-label">7-Day Streak</div>
+              <div class="data-value">+50</div>
+              <div class="data-desc">Read 7 consecutive days</div>
+            </div>
+            <div class="data-item">
+              <div class="data-label">30-Day Streak</div>
+              <div class="data-value">+300</div>
+              <div class="data-desc">Read 30 consecutive days</div>
+            </div>
+            <div class="data-item">
+              <div class="data-label">Referral (One-time)</div>
+              <div class="data-value">+100</div>
+              <div class="data-desc">Invite friend who completes onboarding</div>
+            </div>
+            <div class="data-item">
+              <div class="data-label">Referral (Ongoing)</div>
+              <div class="data-value">+2/day</div>
+              <div class="data-desc">Per active referred user daily</div>
+            </div>
+          </div>
+
+          <h4>Early Bird Multipliers</h4>
+          <p>To drive early adoption, the first 100K users receive multipliers on points:</p>
+          <ul>
+            <li><strong>First 10K users:</strong> 3x multiplier (e.g., daily read = +30 points)</li>
+            <li><strong>Next 90K users (10K-100K):</strong> 2x multiplier</li>
+            <li><strong>After 100K users:</strong> 1x baseline</li>
+          </ul>
+
+          <p>Multiplier is locked-in at account creation. A user who joins on day 1 keeps their 3x multiplier forever, even after the first 10K cap is reached. This creates urgency to join early while rewarding those who do.</p>
+
+          <h4>Streak Mechanics & Breaking</h4>
+          <p>A streak requires one read per calendar day (UTC). Missing a single day breaks the streak. However, users can purchase a "Streak Saver" (costs 50 accumulated points) once per month to extend an active streak by 1 day.</p>
+
+          <p>This mechanic balances:</p>
+          <ul>
+            <li>Incentivizing daily engagement (core KPI for retention and FOMO)</li>
+            <li>Preventing permanent streak loss from life interruptions</li>
+            <li>Creating a use case for accumulating points (beyond airdrop)</li>
+            <li>Introducing a secondary economy (point velocity)</li>
+          </ul>
+
+          <h4>Anti-Sybil Measures</h4>
+          <p>To prevent bot farming, MineAI implements multi-layer verification:</p>
+
+          <h5>Onboarding Verification</h5>
+          <ul>
+            <li>Email verification (or Telegram for bot)</li>
+            <li>IP geolocation (flag suspicious patterns)</li>
+            <li>User-agent analysis (reject headless browser signatures)</li>
+            <li>Behavioral analysis: require read time &gt; 10 seconds to count as "read"</li>
+          </ul>
+
+          <h5>Ongoing Monitoring</h5>
+          <ul>
+            <li>Flagged accounts cannot refer new users until verified</li>
+            <li>Referral chains are monitored for circular patterns</li>
+            <li>Accounts with &gt;10 referrals in 24 hours are audited manually</li>
+            <li>Snapshot-time filtering at airdrop: accounts created within 24 hours of snapshot are excluded</li>
+          </ul>
+
+          <h5>Deterministic Attribution</h5>
+          <p>To prevent referral gaming, referral bonuses are awarded only once per new user. If User A refers Users B and C, User A gets +100 + (+2/day for 2 users). User A cannot create multiple accounts to increase their referral multiplier.</p>
+
+          <h4>Identity & Privacy</h4>
+          <p>MineAI supports multiple identity models:</p>
+          <ul>
+            <li><strong>Anonymous (email only):</strong> Default during points mining phase. No wallet required.</li>
+            <li><strong>Wallet-bound:</strong> Optional. User provides EVM address (or signs a message). Used to claim tokens and access premium features.</li>
+            <li><strong>Social (Telegram, Google):</strong> Optional. Users can link social accounts to prevent impersonation.</li>
+          </ul>
+
+          <p>Data is encrypted at rest. Points are stored server-side and cryptographically signed to prevent tampering. At airdrop time, user identity is snapshoted on-chain, creating a permanent record of who mined which points.</p>
+        </section>
+      </section>
+
+      <!-- Tokenomics -->
+      <section id="tokenomics">
+        <h2>5. Token Economics ($MINE)</h2>
+
+        <section id="token-overview">
+          <h3>5.1 Token Overview</h3>
+
+          <div class="data-card three-col">
+            <div class="data-item">
+              <div class="data-label">Name</div>
+              <div class="data-value">MINE</div>
+            </div>
+            <div class="data-item">
+              <div class="data-label">Chain</div>
+              <div class="data-value">Base</div>
+              <div class="data-desc">Ethereum L2, lower fees</div>
+            </div>
+            <div class="data-item">
+              <div class="data-label">Standard</div>
+              <div class="data-value">ERC-20</div>
+            </div>
+          </div>
+
+          <h4>Total Supply & Inflation</h4>
+          <ul>
+            <li><strong>Initial Supply:</strong> 1,000,000,000 MINE (1 billion)</li>
+            <li><strong>Inflation:</strong> 2% annually, starting Year 2, directed to operational treasury</li>
+            <li><strong>Cap:</strong> Hard capped at 1.02B after Year 1 perpetual inflation to maintain treasury sustainability</li>
+          </ul>
+        </section>
+
+        <section id="distribution">
+          <h3>5.2 Distribution</h3>
+
+          <div class="highlight-block">
+            <h4>Token Allocation</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Allocation</th>
+                  <th>Amount</th>
+                  <th>Timeline</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Community Mining Airdrop</td>
+                  <td>40%</td>
+                  <td>400M MINE</td>
+                  <td>Distributed at snapshot (Day 1 TGE)</td>
+                </tr>
+                <tr>
+                  <td>Ecosystem & Partnerships</td>
+                  <td>20%</td>
+                  <td>200M MINE</td>
+                  <td>Released over 24 months for integrations and partnerships</td>
+                </tr>
+                <tr>
+                  <td>Team & Advisors</td>
+                  <td>15%</td>
+                  <td>150M MINE</td>
+                  <td>12-month cliff, 24-month vesting post-cliff</td>
+                </tr>
+                <tr>
+                  <td>Treasury & Operations</td>
+                  <td>15%</td>
+                  <td>150M MINE</td>
+                  <td>Released as needed for development and liquidity</td>
+                </tr>
+                <tr>
+                  <td>Initial Liquidity</td>
+                  <td>10%</td>
+                  <td>100M MINE</td>
+                  <td>Deployed to Uniswap V4 at launch</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4>Airdrop Mechanics</h4>
+          <p>The community mining airdrop is the core incentive mechanism. On snapshot day (to be announced 2 weeks in advance), MineAI captures the total points of all active users. The airdrop distribution is calculated as:</p>
+
+          <div class="highlight-block">
+            <p style="font-family: 'JetBrains Mono', monospace; margin: 0;">
+              user_airdrop = (user_total_points / all_users_total_points) × 400,000,000 MINE
+            </p>
+          </div>
+
+          <p><strong>Example:</strong> If the total points in the ecosystem at snapshot is 100 million, and User A has 1,000 points with a 3x early bird multiplier (= 3,000 points effectively), User A's share is:</p>
+          <p style="font-family: 'JetBrains Mono', monospace; margin: 1rem 0;">
+            3,000 / 100,000,000 × 400,000,000 = 12,000 MINE
+          </p>
+
+          <h4>Why Points Multiply Early Adopters</h4>
+          <p>Early users benefit from multipliers in two ways:</p>
+          <ul>
+            <li><strong>Direct Multiplier:</strong> First 10K users earn 3x points per action, so they accumulate faster</li>
+            <li><strong>Dilution Benefit:</strong> If an early user has 10,000 points with 3x multiplier and only 50K total points exist in the ecosystem, their share of airdrop is 30,000 / 50,000 = 60%, yielding 240M MINE. If the same 30,000 points later exist among 1B total points, their share drops to 0.003%, yielding 1.2M MINE.</li>
+          </ul>
+
+          <p>This creates powerful FOMO: early adopters capture outsized value, incentivizing users to join and engage immediately rather than wait.</p>
+        </section>
+
+        <section id="utility">
+          <h3>5.3 Token Utility</h3>
+
+          <h4>Primary Utility: Premium Capsule Access</h4>
+          <p>At token launch, MineAI introduces a "Premium Tier" subscription:</p>
+          <ul>
+            <li><strong>Premium Capsule:</strong> +5 additional opportunity signals (vs. 3-5 in free tier)</li>
+            <li><strong>Earlier Delivery:</strong> Premium tier receives capsule at 6 AM UTC (4 hours before free tier at 10 AM)</li>
+            <li><strong>Deeper Analysis:</strong> Each signal includes 5-minute research summary vs. 2-minute free tier</li>
+            <li><strong>Cost:</strong> 1,000 MINE/month or stake 10,000 MINE for lifetime access</li>
+          </ul>
+
+          <p>This creates immediate demand for MINE and a sustainable revenue stream for the protocol.</p>
+
+          <h4>Secondary Utility: Data Marketplace</h4>
+          <p>As MineAI accumulates millions of daily poll responses and engagement patterns, it generates valuable aggregated data:</p>
+          <ul>
+            <li><strong>Sentiment Dashboard:</strong> "What % of AI researchers believe AGI arrives before 2030?" Real-time community consensus.</li>
+            <li><strong>Trend Detection:</strong> Which topics are gaining engagement velocity (early signal of market sentiment shifts)</li>
+            <li><strong>Demographic Insights:</strong> Which user segments favor which opportunity types (AI-only users vs. multi-topic users)</li>
+          </ul>
+
+          <p>MineAI sells read-only access to this data marketplace to:</p>
+          <ul>
+            <li>Venture capital firms (market sentiment analysis)</li>
+            <li>Crypto projects (community perception tracking)</li>
+            <li>Researchers (large-scale data on AI community attitudes)</li>
+          </ul>
+
+          <p>Marketplace revenue is split: 50% to $MINE stakers, 50% to treasury for operations. Cost is variable ($100-$10K/month based on query access level), payable in MINE or stablecoins.</p>
+
+          <h4>Tertiary Utility: Governance & Protocol Parameters</h4>
+          <p>$MINE holders can vote on:</p>
+          <ul>
+            <li>Changes to points structure (e.g., increase referral bonuses)</li>
+            <li>New interest categories for personalization</li>
+            <li>Ecosystem fund allocation (which partnerships to pursue)</li>
+            <li>Premium tier pricing</li>
+          </ul>
+
+          <p>Governance is implemented via OpenZeppelin Governor, with voting weight proportional to $MINE balance. Voting has a 3-day window, 51% quorum requirement, and 2-day timelock before execution.</p>
+
+          <h4>Quaternary Utility: Staking & Yield</h4>
+          <p>Users can stake $MINE in a Lido-style liquid staking contract to earn:</p>
+          <ul>
+            <li><strong>Protocol Revenue Share:</strong> 50% of data marketplace fees</li>
+            <li><strong>Inflation Allocation:</strong> 100% of annual 2% inflation (post-Year 1)</li>
+            <li><strong>Governance Boost:</strong> Staked tokens earn voting power multiplier (2x for 1-year stake, 3x for 2+ year stake)</li>
+          </ul>
+
+          <p>Staking is non-custodial (users hold keys) and staking tokens are liquid (can be traded while staked).</p>
+        </section>
+      </section>
+
+      <!-- Growth Strategy -->
+      <section id="growth">
+        <h2>6. Growth Strategy</h2>
+
+        <p>MineAI's growth is not paid acquisition but organic viral expansion through three phases.</p>
+
+        <h3>Phase 1: Organic AI Community (0-10K users)</h3>
+
+        <h4>Duration: Months 1-3</h4>
+        <p><strong>Goal:</strong> Reach 10K active daily users through organic channels, prove product-market fit in the AI community.</p>
+
+        <h4>Tactics</h4>
+        <ul class="feature-list">
+          <li><strong>Claude Ecosystem Launch:</strong> Ship MCP Server as an official Claude skill. Leverage @claude official promotion channels and community Discord.</li>
+          <li><strong>Hacker News / Product Hunt:</strong> Launch with thoughtful positioning: "Curated daily AI/crypto signals, delivered inside Claude." Emphasize value (intelligence + points), not tokens.</li>
+          <li><strong>AI Community Seeding:</strong> Engage AI Twitter, LessWrong, AI Discord communities. Provide early access, gather feedback, iterate rapidly.</li>
+          <li><strong>Content Quality as Growth Engine:</strong> Focus entirely on capsule quality. If signals are valuable, users tell other users. Use Net Promoter Score (NPS) feedback to improve daily.</li>
+          <li><strong>NO Token Mention:</strong> Deliberately avoid mentioning $MINE or airdrop. Positioning is "free daily intelligence," not "get rich quick via airdrop."</li>
+        </ul>
+
+        <h4>Success Metrics</h4>
+        <ul>
+          <li>10,000 registered users</li>
+          <li>3,000+ daily active users (30% DAU/MAU)</li>
+          <li>45%+ daily read engagement</li>
+          <li>NPS &gt; 40</li>
+        </ul>
+
+        <h3>Phase 2: Referral Explosion (10K-100K users)</h3>
+
+        <h4>Duration: Months 3-6</h4>
+        <p><strong>Goal:</strong> Activate referral virality, expand to ChatGPT, announce token airdrop to trigger FOMO.</p>
+
+        <h4>Tactics</h4>
+        <ul class="feature-list">
+          <li><strong>Referral System Activation:</strong> Promote referral codes in-app. Create leaderboards for top referrers (with cosmetic rewards, not token promises). "Refer 10 friends, see your name in our hall of fame."</li>
+          <li><strong>ChatGPT Plugin Launch:</strong> Deploy native plugin for ChatGPT to access 100M+ monthly active users. This is the single largest distribution lever.</li>
+          <li><strong>Airdrop Announcement:</strong> Announce token airdrop snapshot at 10K users. Messaging: "Every point you've earned so far counts. Join before snapshot to earn."</li>
+          <li><strong>Influencer Seeding:</strong> Send free premium access to 20-30 AI/crypto influencers (LLM researchers, crypto analysts, VCs). Let them experience value and share organically if impressed.</li>
+          <li><strong>Community Ambassadors:</strong> Recruit 5-10 top referrers as official ambassadors, grant them early token allocations (from team allocation), ask them to create content about MineAI.</li>
+        </ul>
+
+        <h4>Expected Viral Coefficient</h4>
+        <p>Assuming each user who completes onboarding refers 0.5 additional users on average, and conversion from referral link to active user is 20%, viral coefficient K = 0.5 × 0.2 = 0.1 (non-viral by SaaS standards). However, with strong FOMO from airdrop announcement, we model K = 0.2-0.3, yielding 10x growth in 3 months.</p>
+
+        <h4>Success Metrics</h4>
+        <ul>
+          <li>100,000 registered users</li>
+          <li>15,000+ daily active users</li>
+          <li>20+ million total points accumulated</li>
+          <li>Airdrop snapshot captures public imagination (trending on Twitter)</li>
+        </ul>
+
+        <h3>Phase 3: Token Launch & Network Effects (100K+ users)</h3>
+
+        <h4>Duration: Months 6-12</h4>
+        <p><strong>Goal:</strong> Launch $MINE token, distribute airdrop, introduce premium features and data marketplace, reach 500K users.</p>
+
+        <h4>Tactics</h4>
+        <ul class="feature-list">
+          <li><strong>Token Launch on Base:</strong> Deploy ERC-20 contract, liquidity pool (Uniswap V4), burn governance. List on major Base DEXs and on-ramps (Moonpay, Ramp).</li>
+          <li><strong>Airdrop Distribution:</strong> Execute snapshot, calculate allocations, airdrop to all user wallets in single batch transaction. Announce distribution on all channels.</li>
+          <li><strong>Premium Tier Launch:</strong> Introduce premium capsules requiring 1,000 MINE/month or 10,000 MINE lock. Market to existing users and new wallet-bound users.</li>
+          <li><strong>Data Marketplace Beta:</strong> Onboard 5-10 enterprise customers (VCs, crypto projects) to aggregated sentiment data. Gather feedback, refine API.</li>
+          <li><strong>Telegram Bot Expansion:</strong> Launch Telegram bot for non-technical users (900M+ Telegram base). Allow points earning and wallet binding via bot.</li>
+          <li><strong>Ecosystem Partnerships:</strong> Partner with 3-5 complementary projects (e.g., decentralized analytics platforms, AI research DAOs). Cross-promote, share user bases.</li>
+        </ul>
+
+        <h4>Network Effects Unlocked</h4>
+        <ul>
+          <li><strong>Token Liquidity:</strong> MINE traded on DEXs creates price discovery and retail appeal</li>
+          <li><strong>Premium Demand:</strong> Users who hodl tokens want premium access, creating revenue stream</li>
+          <li><strong>Data Marketplace Revenue:</strong> Protocol earns in stablecoins, incentivizes further development</li>
+          <li><strong>DAO Governance:</strong> Token holders vote on features, creating alignment between community and team</li>
+        </ul>
+
+        <h4>Success Metrics</h4>
+        <ul>
+          <li>500,000 registered users</li>
+          <li>50,000+ daily active users</li>
+          <li>$5M+ trading volume for MINE in first month</li>
+          <li>1,000+ premium subscribers</li>
+          <li>10+ data marketplace customers</li>
+        </ul>
+      </section>
+
+      <!-- Technical Architecture -->
+      <section id="tech">
+        <h2>7. Technical Architecture</h2>
+
+        <h3>7.1 System Overview</h3>
+
+        <p>MineAI's technical stack is designed for scale, reliability, and rapid iteration. Here's the layered architecture:</p>
+
+        <div class="highlight-block">
+          <h4>Frontend Layer</h4>
+          <ul>
+            <li><strong>Web App:</strong> Next.js 15 + React 19, deployed on Vercel. Handles user onboarding, points dashboard, wallet connection, premium subscription.</li>
+            <li><strong>MCP Server:</strong> Node.js 20 + TypeScript, packaged as Claude-compatible MCP server. Distributed via npm registry and official Claude SDK.</li>
+            <li><strong>ChatGPT Plugin:</strong> Node.js backend + OpenAI plugin manifest. Runs on Cloudflare Workers for edge performance.</li>
+            <li><strong>Telegram Bot:</strong> Node.js + telegraf library. Single webhook handler at /webhook/telegram.</li>
+          </ul>
+        </div>
+
+        <div class="highlight-block">
+          <h4>Backend Layer</h4>
+          <ul>
+            <li><strong>API Server:</strong> Node.js + Express, containerized with Docker. Deployed on Render or Railway for ease of operations. Scales horizontally via load balancer.</li>
+            <li><strong>AI Content Engine:</strong> Python 3.11 + FastAPI. Runs scheduled jobs (hourly data ingestion, daily capsule generation). Uses Claude API (Sonnet for fast summarization, Opus for premium tier).</li>
+            <li><strong>Database:</strong> PostgreSQL 15 on managed service (AWS RDS or Railway). Schema includes users, points, capsules, poll responses, referrals. Fully encrypted at rest.</li>
+            <li><strong>Cache Layer:</strong> Redis (managed). Used for session storage, rate limiting, and caching popular capsules.</li>
+            <li><strong>Job Queue:</strong> Bull (Redis-backed job queue). Handles async tasks: email sending, points calculation, airdrop distribution, API webhook retries.</li>
+          </ul>
+        </div>
+
+        <div class="highlight-block">
+          <h4>Blockchain Layer</h4>
+          <ul>
+            <li><strong>Token Contract:</strong> OpenZeppelin ERC-20 + Governor. Deployed to Base mainnet. Uses AccessControl for multi-sig governance.</li>
+            <li><strong>Liquidity:</strong> Uniswap V4 pool (MINE / USDC). Initial liquidity seeded with 100M MINE + equivalent stablecoin value.</li>
+            <li><strong>RPC Provider:</strong> Alchemy for Base, with fallback to Infura. Rate limited to prevent DoS.</li>
+          </ul>
+        </div>
+
+        <h3>7.2 Data Flow</h3>
+
+        <h4>Daily Capsule Generation Pipeline</h4>
+        <ul>
+          <li><strong>1. Ingestion (00:00-01:00 UTC):</strong> Python crawler fetches latest from 100+ sources using libraries (feedparser, tweepy, requests). Raw data stored in S3 as JSON.</li>
+          <li><strong>2. Summarization (01:00-03:00 UTC):</strong> Claude Sonnet API processes each article: extract key points, score impact (1-100 scale), categorize by topic. Results written to PostgreSQL "candidates" table.</li>
+          <li><strong>3. Deduplication (03:00-03:30 UTC):</strong> Python script runs cosine similarity on embeddings (using sentence-transformers/all-MiniLM-L6-v2) to find duplicate stories. Merges duplicates, keeps highest-confidence version.</li>
+          <li><strong>4. Trend Detection (03:30-04:00 UTC):</strong> Identify emerging trends (topics mentioned in &gt; 3 sources within 6 hours). Assign trend boost to related articles.</li>
+          <li><strong>5. Quality Filtering (04:00-04:30 UTC):</strong> Remove low-signal articles (impact score &lt; 40, sources with historical low accuracy). Apply tone analysis filter (reject sensationalism via sentiment API).</li>
+          <li><strong>6. Personalization (04:30-05:30 UTC):</strong> For each user, score remaining articles by interest match. Generate personalized capsule (Highlight + 3-5 Signals).</li>
+          <li><strong>7. Poll Generation (05:30-06:00 UTC):</strong> Claude generates one timely poll question based on day's top stories. Example: If 5+ sources mention "AI safety regulation," generate poll: "Should AI safety be regulated by governments?"</li>
+          <li><strong>8. Editorial Review (06:00-06:30 UTC):</strong> Human editor reviews capsule template, can edit stories or add breaking news manually.</li>
+          <li><strong>9. Delivery (06:30-10:00 UTC):</strong> For each user, deliver capsule based on their platform preference (email, Claude tool, ChatGPT plugin, Telegram, web). Mark "delivered" in database.</li>
+        </ul>
+
+        <h3>7.3 Security Considerations</h3>
+
+        <h4>Data Protection</h4>
+        <ul>
+          <li>All data at rest is encrypted with AES-256 (PostgreSQL pgcrypto, S3 SSE-KMS)</li>
+          <li>Data in transit uses TLS 1.3</li>
+          <li>Sensitive fields (email, IP, wallet) are encrypted with rotating keys</li>
+          <li>Backups are taken hourly and stored in separate geographic region</li>
+        </ul>
+
+        <h4>Access Control</h4>
+        <ul>
+          <li>API endpoints require JWT bearer token (signed by server, verified by server)</li>
+          <li>User can only access their own data (points, capsules, referrals)</li>
+          <li>Admin endpoints (editorial override, user bans) require multi-sig approval</li>
+        </ul>
+
+        <h4>Anti-Bot & Rate Limiting</h4>
+        <ul>
+          <li>Rate limiting: 100 requests/minute per IP (Redis-backed)</li>
+          <li>Behavioral analysis: Track read time, poll response time, referral patterns. Flag anomalies.</li>
+          <li>Captcha on referral link generation for flagged accounts</li>
+          <li>Snapshot-time filtering: accounts created within 24 hours of snapshot are excluded from airdrop</li>
+        </ul>
+
+        <h4>Smart Contract Security</h4>
+        <ul>
+          <li>Token contract is a standard OZ ERC-20 with no custom logic (minimal attack surface)</li>
+          <li>Governor contract uses OZ standard Governor (battle-tested, audited)</li>
+          <li>Multi-sig wallet (3-of-5 signers) controls token contract pause/mint functions</li>
+          <li>Pre-launch audit by reputable firm (Trail of Bits or equivalent)</li>
+        </ul>
+
+        <h3>7.4 Performance & Scalability</h3>
+
+        <h4>Database Optimization</h4>
+        <ul>
+          <li>Indexes on user_id, created_at, topic_id for fast queries</li>
+          <li>Materialized views for aggregation queries (total points per user, daily active users)</li>
+          <li>Partitioning by user_id for read-heavy workloads (points, capsules)</li>
+          <li>Read replicas for analytics queries (separate from operational database)</li>
+        </ul>
+
+        <h4>API Performance</h4>
+        <ul>
+          <li>Capsule delivery cached in Redis (10-minute TTL per user, invalidates when user preferences change)</li>
+          <li>Points balance cached for 5 minutes (eventual consistency acceptable)</li>
+          <li>Most endpoints return within 100ms P95 latency</li>
+        </ul>
+
+        <h4>Scalability Roadmap</h4>
+        <ul>
+          <li><strong>Phase 1 (0-100K users):</strong> Single Node.js process + PostgreSQL + Redis. ~$500/month infrastructure.</li>
+          <li><strong>Phase 2 (100K-1M users):</strong> Horizontal scaling with load balancer, read replicas, separate write and read pools. ~$2K/month.</li>
+          <li><strong>Phase 3 (1M+ users):</strong> Migrate to cloud-native (AWS Lambda + Aurora Serverless, or Render + managed DB). Auto-scaling on request volume. ~$5K-10K/month.</li>
+        </ul>
+      </section>
+
+      <!-- Roadmap -->
+      <section id="roadmap">
+        <h2>8. Roadmap</h2>
+
+        <h3>Phase 1: Points Mining Live (Q1 2026)</h3>
+        <div class="data-card">
+          <strong style="color: var(--accent-cyan);">Month 1: Foundation (Weeks 1-4)</strong>
+          <ul style="margin-top: 0.5rem;">
+            <li>Ship MCP Server (Claude compatible)</li>
+            <li>Build points engine and identity system</li>
+            <li>Deploy daily capsule generation pipeline</li>
+            <li>Launch web app (onboarding, dashboard)</li>
+            <li>Begin closed alpha with 500 testers</li>
+          </ul>
+        </div>
+
+        <div class="data-card">
+          <strong style="color: var(--accent-cyan);">Month 2: Refinement (Weeks 5-8)</strong>
+          <ul style="margin-top: 0.5rem;">
+            <li>Public launch on Product Hunt & Hacker News</li>
+            <li>Reach 1,000 registered users</li>
+            <li>Optimize capsule quality based on user feedback</li>
+            <li>Implement anti-sybil measures</li>
+            <li>Add Telegram bot support</li>
+          </ul>
+        </div>
+
+        <div class="data-card">
+          <strong style="color: var(--accent-cyan);">Month 3: Scale (Weeks 9-12)</strong>
+          <ul style="margin-top: 0.5rem;">
+            <li>Reach 10,000 registered users</li>
+            <li>Activate referral system and leaderboards</li>
+            <li>Announce token airdrop with snapshot date</li>
+            <li>Achieve 30%+ daily active user engagement</li>
+          </ul>
+        </div>
+
+        <h3>Phase 2: Token Launch & Expansion (Q2 2026)</h3>
+        <div class="data-card">
+          <strong style="color: var(--accent-cyan);">Month 4: Distribution Expansion</strong>
+          <ul style="margin-top: 0.5rem;">
+            <li>Launch ChatGPT native plugin</li>
+            <li>Reach 50,000 registered users</li>
+            <li>Activate ambassador program (top 10 referrers)</li>
+            <li>Execute airdrop snapshot at 10K users milestone</li>
+          </ul>
+        </div>
+
+        <div class="data-card">
+          <strong style="color: var(--accent-cyan);">Month 5: Token Deployment</strong>
+          <ul style="margin-top: 0.5rem;">
+            <li>Deploy $MINE token contract on Base (ERC-20 + Governor)</li>
+            <li>Seed liquidity on Uniswap V4 (100M MINE + stablecoins)</li>
+            <li>Distribute airdrop to all miners</li>
+            <li>List on major Base DEXs and CEXs</li>
+          </ul>
+        </div>
+
+        <div class="data-card">
+          <strong style="color: var(--accent-cyan);">Month 6: Premium & Partnerships</strong>
+          <ul style="margin-top: 0.5rem;">
+            <li>Launch premium capsule tier (1,000 MINE/month)</li>
+            <li>Onboard 5-10 data marketplace customers</li>
+            <li>Reach 100,000 registered users</li>
+            <li>Establish 3-5 ecosystem partnerships</li>
+          </ul>
+        </div>
+
+        <h3>Phase 3: Premium & Data Marketplace (Q3 2026)</h3>
+        <div class="data-card">
+          <strong style="color: var(--accent-cyan);">Goals</strong>
+          <ul style="margin-top: 0.5rem;">
+            <li>250,000+ registered users</li>
+            <li>$1M+ monthly data marketplace revenue</li>
+            <li>10,000+ premium subscribers</li>
+            <li>Launch staking pool for $MINE holders</li>
+            <li>Implement DAO governance (vote on features)</li>
+          </ul>
+        </div>
+
+        <h3>Phase 4: Protocol Expansion (Q4 2026)</h3>
+        <div class="data-card">
+          <strong style="color: var(--accent-cyan);">Goals</strong>
+          <ul style="margin-top: 0.5rem;">
+            <li>500,000+ registered users</li>
+            <li>Multi-chain expansion (Arbitrum, Optimism, Polygon)</li>
+            <li>AI agent marketplace (allow third-party agents to offer signals via MineAI)</li>
+            <li>Academic partnerships (MIT, Stanford) for research data access</li>
+            <li>Enterprise tier (custom capsules for funds, protocols)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Team -->
+      <section id="team">
+        <h2>9. Team</h2>
+
+        <p>MineAI is built by an experienced team with a proven track record of shipping AI-native products at scale.</p>
+
+        <h3>Team Profile</h3>
+        <ul class="feature-list">
+          <li><strong>AI-First DNA:</strong> Core team previously built AIggs, the first AI-native blockchain game. Shipped complex systems (AI agents, on-chain contracts, full stack) in compressed timelines.</li>
+          <li><strong>7×24 Acceleration Model:</strong> Team operates on an AI-accelerated development workflow where Claude (via MCP APIs) handles content generation, development tasks, and operational work autonomously. Humans focus on high-level strategy and final QA.</li>
+          <li><strong>Proven Execution:</strong> AIggs reached thousands of users, managed complex token economics, and launched on Base successfully. Same playbook applied to MineAI.</li>
+          <li><strong>Deep Crypto Expertise:</strong> Team members have shipped on Ethereum, Arbitrum, and Base. Familiar with MEV, liquidity provision, and token launch mechanics.</li>
+        </ul>
+
+        <h3>Key Roles</h3>
+        <ul>
+          <li><strong>Founder & CEO:</strong> Crypto-native builder, led AIggs from concept to launch, responsible for product vision and growth strategy</li>
+          <li><strong>Technical Lead:</strong> Full-stack engineer, architected AIggs backend systems, managing MineAI infrastructure and scalability</li>
+          <li><strong>Content & Operations:</strong> AI-driven, manages daily capsule generation, community engagement, and data quality</li>
+          <li><strong>Advisors:</strong> Including venture partners with experience in user acquisition and Web3 expansion</li>
+        </ul>
+
+        <h3>Why MineAI Will Win</h3>
+        <p>The team has shipped AI-native products before. We know how to build with AI as a tool, not gimmick. We've navigated token launches, on-chain dynamics, and rapid scaling. MineAI is the natural next step in our mission to build the AI-Web3 bridge.</p>
+      </section>
+
+      <!-- Conclusion -->
+      <section id="conclusion">
+        <h2>10. Conclusion</h2>
+
+        <p>MineAI represents a paradigm shift in how information is distributed, monetized, and owned in the AI era.</p>
+
+        <p>For decades, Web2 has extracted value from users: Google collects attention, Facebook sells ads, Twitter captures data. Users receive free services but forfeit ownership and monetization rights.</p>
+
+        <p>MineAI inverts this model. Users receive genuine value (curated, personalized intelligence delivered proactively), earn ownership through engagement (points accumulate toward airdrop), and participate in protocol growth (governance, data marketplace revenue, staking yields).</p>
+
+        <h3>Why Now?</h3>
+        <p>Three technologies converge:</p>
+        <ul>
+          <li><strong>Mature AI:</strong> Claude, GPT-4, and open models have reached production quality. AI content generation, summarization, and personalization are now cheap and reliable.</li>
+          <li><strong>Tool Ecosystems:</strong> MCP, OpenAI Plugins, and ChatGPT integrations have standardized AI tool interfaces, enabling single-source multi-platform deployment.</li>
+          <li><strong>L2 Blockchain:</strong> Base and similar chains have eliminated gas cost friction, making token transfers and smart contracts economically viable for consumer products.</li>
+        </ul>
+
+        <p>The combination is explosive: AI reaches users where they work. Blockchain enables ownership. Together, they create a new category of product—AI-native, Web3-native—that was impossible five years ago.</p>
+
+        <h3>The Vision</h3>
+        <p>MineAI is the first protocol to harness this combination. In 18 months, we will have:</p>
+        <ul>
+          <li>500K+ daily active users engaged in intelligence mining</li>
+          <li>Millions of MINE tokens distributed and actively used</li>
+          <li>A thriving ecosystem of third-party agents offering specialized signals (biotech, macro, etc.)</li>
+          <li>Established ourselves as the canonical intelligence layer of the AI-Web3 stack</li>
+        </ul>
+
+        <p>The Internet of the 2030s will be AI-native. MineAI is building the intelligence infrastructure for that future, and inviting users to own a piece of it.</p>
+
+        <div class="highlight-block">
+          <p style="font-style: italic; margin: 0;">
+            "Every protocol needs distribution. Every user needs intelligence. MineAI is the meeting point."
+          </p>
+        </div>
+      </section>
+
+      <hr style="border: none; border-top: 1px solid var(--border-color); margin: 3rem 0;">
+
+      <section style="padding: 2rem 0;">
+        <h3>Document Information</h3>
+        <p><strong>Version:</strong> 1.0 (Published Q1 2026)</p>
+        <p><strong>Last Updated:</strong> March 2026</p>
+        <p><strong>Website:</strong> <a href="https://mineai.xyz" style="color: var(--accent-cyan); text-decoration: none;">mineai.xyz</a></p>
+        <p><strong>GitHub:</strong> <a href="https://github.com/mineai" style="color: var(--accent-cyan); text-decoration: none;">github.com/mineai</a></p>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2026 MineAI. All rights reserved.</p>
+      <p>Built with AI. Owned by users. Running on Base.</p>
+      <p><a href="https://mineai.xyz" class="footer-link">mineai.xyz</a> | <a href="https://twitter.com/mineai" class="footer-link">@mineai</a></p>
+    </div>
+  </footer>
+
+  <script>
+    // Progress Bar
+    function updateProgressBar() {
+      const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = window.scrollY;
+      const scrollPercent = windowHeight > 0 ? (scrolled / windowHeight) * 100 : 0;
+      document.querySelector('.progress-bar').style.width = scrollPercent + '%';
+    }
+
+    window.addEventListener('scroll', updateProgressBar);
+
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const tocSidebar = document.getElementById('tocSidebar');
+
+    menuToggle.addEventListener('click', () => {
+      tocSidebar.classList.toggle('mobile-open');
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.toc-link').forEach(link => {
+      link.addEventListener('click', () => {
+        tocSidebar.classList.remove('mobile-open');
+      });
+    });
+
+    // Active TOC Link Highlighting
+    function updateActiveTocLink() {
+      const sections = document.querySelectorAll('section[id]');
+      const tocLinks = document.querySelectorAll('.toc-link');
+
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.scrollY >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveTocLink);
+    updateActiveTocLink();
+
+    // Smooth scroll offset for fixed header
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

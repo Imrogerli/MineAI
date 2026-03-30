@@ -64,40 +64,48 @@ body{font-family:'Inter',sans-serif;overflow-x:hidden;background:#060a14;color:#
 .reveal.visible{opacity:1;transform:translateY(0)}
 .reveal-d1{transition-delay:0.1s}.reveal-d2{transition-delay:0.2s}.reveal-d3{transition-delay:0.3s}.reveal-d4{transition-delay:0.4s}
 
-/* === AI DECODE / SCRAMBLE TEXT === */
+/* === AI DECODE / SCRAMBLE — Hero only === */
 .scramble-text .char{display:inline-block;transition:transform 0.1s}
 .scramble-text .char.decoding{color:#22d3ee;text-shadow:0 0 8px rgba(34,211,238,0.5)}
 
-/* === TYPEWRITER === */
-.typewriter{overflow:hidden;white-space:nowrap;border-right:2px solid #22d3ee;width:0;animation:typeExpand 3s steps(60,end) 1s forwards,blinkCaret 0.6s step-end infinite}
-@keyframes typeExpand{from{width:0}to{width:100%}}
-@keyframes blinkCaret{50%{border-color:transparent}}
+/* === BLUR-TO-FOCUS reveal (AI "thinking" → clarity) === */
+.blur-focus{opacity:0;filter:blur(12px);transform:translateY(0);transition:opacity 0.8s ease,filter 1.2s ease}
+.blur-focus.visible{opacity:1;filter:blur(0)}
 
-/* === GLITCH HOVER === */
+/* === WORD-BY-WORD stagger fade === */
+.word-stagger .word{display:inline-block;opacity:0;transform:translateY(8px);transition:opacity 0.5s ease,transform 0.5s ease}
+.word-stagger.visible .word{opacity:1;transform:translateY(0)}
+
+/* === GRADIENT FLOW on keywords === */
+.grad-flow{background:linear-gradient(90deg,#22d3ee,#a78bfa,#22d3ee);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-flow.visible{animation:gradShift 3s ease infinite}
+@keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* === LIGHT SWEEP on cards (bottom border glow) === */
+.card-sweep{position:relative;overflow:hidden}
+.card-sweep::after{content:'';position:absolute;bottom:0;left:-100%;width:60%;height:2px;background:linear-gradient(90deg,transparent,rgba(34,211,238,0.6),transparent);transition:none}
+.card-sweep.visible::after{animation:cardSweep 1.5s ease 0.3s forwards}
+@keyframes cardSweep{0%{left:-60%}100%{left:100%}}
+
+/* === GLITCH HOVER — cards only, user-triggered === */
 .glitch-hover{position:relative}
 .glitch-hover:hover{animation:glitchShake 0.3s linear}
-.glitch-hover::before,.glitch-hover::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;pointer-events:none}
-.glitch-hover:hover::before{opacity:1;color:#22d3ee;clip-path:polygon(0 0,100% 0,100% 33%,0 33%);transform:translateX(-2px);animation:glitchSlice 0.3s linear}
-.glitch-hover:hover::after{opacity:1;color:#a78bfa;clip-path:polygon(0 67%,100% 67%,100% 100%,0 100%);transform:translateX(2px);animation:glitchSlice 0.3s linear reverse}
 @keyframes glitchShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-2px)}40%{transform:translateX(2px)}60%{transform:translateX(-1px)}80%{transform:translateX(1px)}}
-@keyframes glitchSlice{0%{clip-path:polygon(0 0,100% 0,100% 20%,0 20%)}25%{clip-path:polygon(0 40%,100% 40%,100% 60%,0 60%)}50%{clip-path:polygon(0 10%,100% 10%,100% 45%,0 45%)}75%{clip-path:polygon(0 55%,100% 55%,100% 85%,0 85%)}100%{clip-path:polygon(0 0,100% 0,100% 33%,0 33%)}}
-
-/* === SCAN REVEAL (text highlight sweep) === */
-.scan-reveal{position:relative;display:inline-block}
-.scan-reveal::after{content:'';position:absolute;top:0;left:-10%;width:20%;height:100%;background:linear-gradient(90deg,transparent,rgba(34,211,238,0.15),transparent);transform:skewX(-15deg);opacity:0}
-.scan-reveal.active::after{opacity:1;animation:scanSweep 1.2s ease-out forwards}
-@keyframes scanSweep{0%{left:-20%}100%{left:120%}}
 
 /* === MATRIX CANVAS === */
-#matrix-canvas{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.06;pointer-events:none;z-index:0}
+#matrix-canvas{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.04;pointer-events:none;z-index:0}
 
-/* === FLOATING PARTICLES === */
-.particle{position:absolute;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(34,211,238,0.12);pointer-events:none;animation:particleFloat 8s linear infinite}
-@keyframes particleFloat{0%{transform:translateY(0) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-400px) rotate(180deg);opacity:0}}
+/* === FLOATING PARTICLES (subtler) === */
+.particle{position:absolute;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(34,211,238,0.08);pointer-events:none;animation:particleFloat 10s linear infinite}
+@keyframes particleFloat{0%{transform:translateY(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-400px);opacity:0}}
 
 /* === PULSE DOT on timeline === */
 .pulse-dot{position:relative}
 .pulse-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(6,182,212,0.4);animation:pulseRing 2s ease-out infinite}
+
+/* === TYPEWRITER CURSOR for hero subtitle === */
+.typing-cursor::after{content:'|';color:#22d3ee;animation:blinkCursor 0.8s step-end infinite;margin-left:2px}
+@keyframes blinkCursor{50%{opacity:0}}
 
 /* Scrollbar */
 ::-webkit-scrollbar{width:4px}
@@ -220,13 +228,13 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 <section id="how" class="py-24 px-5">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4 scan-reveal" data-scramble>Three steps. Zero effort.</h2>
+      <h2 class="blur-focus text-3xl md:text-5xl font-black text-white mb-4">Three steps. Zero effort.</h2>
       <p class="reveal text-slate-400 text-lg max-w-xl mx-auto">No capital needed. No complex setup. Your AI does the work — you collect the rewards.</p>
     </div>
 
     <div class="grid md:grid-cols-3 gap-6">
       <!-- Step 1 -->
-      <div class="reveal glass-card p-8 relative group">
+      <div class="reveal glass-card card-sweep p-8 relative group">
         <div class="absolute top-6 right-6 counter text-5xl font-black text-cyan-500/10 group-hover:text-cyan-500/20 transition-colors">01</div>
         <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -236,7 +244,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
       </div>
 
       <!-- Step 2 -->
-      <div class="reveal reveal-d1 glass-card p-8 relative group">
+      <div class="reveal reveal-d1 glass-card card-sweep p-8 relative group">
         <div class="absolute top-6 right-6 counter text-5xl font-black text-cyan-500/10 group-hover:text-cyan-500/20 transition-colors">02</div>
         <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
@@ -246,7 +254,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
       </div>
 
       <!-- Step 3 -->
-      <div class="reveal reveal-d2 glass-card p-8 relative group">
+      <div class="reveal reveal-d2 glass-card card-sweep p-8 relative group">
         <div class="absolute top-6 right-6 counter text-5xl font-black text-cyan-500/10 group-hover:text-cyan-500/20 transition-colors">03</div>
         <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -265,7 +273,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
       <!-- Left: Text -->
       <div>
         <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-6 leading-tight">
-          <span data-scramble>Auto-discover.</span> <br/><span class="grad-text-warm" data-scramble>Auto-earn.</span>
+          Auto-discover. <br/><span class="grad-text-warm grad-flow">Auto-earn.</span>
         </h2>
         <p class="reveal text-slate-400 text-lg mb-8 leading-relaxed">
           AI scans thousands of sources 24/7 and distills the one thing you need to know today. Personalized to your interests — tech, business, markets, crypto, or all of the above.
@@ -367,7 +375,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 <section id="points" class="py-24 px-5">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4 scan-reveal">Stack points. <span class="grad-text" data-scramble>Earn $MINE.</span></h2>
+      <h2 class="blur-focus text-3xl md:text-5xl font-black text-white mb-4">Stack points. <span class="grad-text grad-flow">Earn $MINE.</span></h2>
       <p class="reveal text-slate-400 text-lg max-w-xl mx-auto">The earlier you join, the more you earn. Points convert to $MINE tokens at airdrop.</p>
     </div>
 
@@ -420,7 +428,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 <section id="platforms" class="py-24 px-5 relative">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4" data-scramble>Works where you already are.</h2>
+      <h2 class="blur-focus text-3xl md:text-5xl font-black text-white mb-4 word-stagger">Works where you already are.</h2>
       <p class="reveal text-slate-400 text-lg max-w-xl mx-auto">No new app to download. MineAI lives inside the AI tools you use every day.</p>
     </div>
 
@@ -482,7 +490,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 <section class="py-24 px-5">
   <div class="max-w-4xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4 scan-reveal">Road to <span class="grad-text" data-scramble>$MINE</span></h2>
+      <h2 class="blur-focus text-3xl md:text-5xl font-black text-white mb-4">Road to <span class="grad-text grad-flow">$MINE</span></h2>
       <p class="reveal text-slate-400 text-lg">Accumulate points now. Airdrop is coming.</p>
     </div>
 
@@ -624,10 +632,9 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-// ========== TEXT SCRAMBLE / DECODE EFFECT ==========
-const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*<>{}[]';
+// ========== TEXT SCRAMBLE — HERO ONLY ==========
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&<>{}';
 function scrambleText(el) {
-  // Get only direct text nodes, preserve child elements
   const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
   const textNodes = [];
   let node;
@@ -638,65 +645,82 @@ function scrambleText(el) {
     const original = textNode.textContent;
     const span = document.createElement('span');
     span.className = 'scramble-text';
-    original.split('').forEach((ch, i) => {
+    original.split('').forEach((ch) => {
       const s = document.createElement('span');
       s.className = 'char';
       s.dataset.final = ch;
-      s.textContent = ch === ' ' ? '\u00A0' : chars[Math.floor(Math.random() * chars.length)];
-      s.style.opacity = '0.3';
+      s.textContent = ch === ' ' ? '\u00A0' : ch;
       span.appendChild(s);
     });
     textNode.parentNode.replaceChild(span, textNode);
-    // Animate each char
     const charEls = span.querySelectorAll('.char');
     charEls.forEach((s, i) => {
       const final = s.dataset.final;
-      if (final === ' ') { s.textContent = '\u00A0'; s.style.opacity = '1'; return; }
+      if (final === ' ') return;
       let iterations = 0;
-      const maxIterations = 3 + Math.random() * 5;
-      const delay = i * 30 + Math.random() * 60;
+      const maxIterations = 2 + Math.random() * 3;
+      const delay = i * 25;
       setTimeout(() => {
         const interval = setInterval(() => {
           if (iterations >= maxIterations) {
             clearInterval(interval);
             s.textContent = final;
             s.classList.remove('decoding');
-            s.style.opacity = '1';
             return;
           }
           s.textContent = chars[Math.floor(Math.random() * chars.length)];
           s.classList.add('decoding');
-          s.style.opacity = '1';
           iterations++;
-        }, 40);
+        }, 35);
       }, delay);
     });
   });
 }
+// Only trigger on hero h1
+const heroH1 = document.querySelector('[data-scramble]');
+if (heroH1) {
+  const scrambleObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { scrambleText(e.target); scrambleObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.3 });
+  scrambleObs.observe(heroH1);
+}
 
-// Trigger scramble on scroll-reveal
-const scrambleObs = new IntersectionObserver((entries) => {
+// ========== BLUR-FOCUS + WORD-STAGGER + GRAD-FLOW ==========
+const multiObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
-      scrambleText(e.target);
-      scrambleObs.unobserve(e.target);
+      e.target.classList.add('visible');
+      // Word stagger: wrap words in spans
+      if (e.target.classList.contains('word-stagger') && !e.target.dataset.wrapped) {
+        e.target.dataset.wrapped = '1';
+        const walker = document.createTreeWalker(e.target, NodeFilter.SHOW_TEXT, null, false);
+        const textNodes = [];
+        let n;
+        while (n = walker.nextNode()) { if (n.textContent.trim()) textNodes.push(n); }
+        textNodes.forEach(tn => {
+          const frag = document.createDocumentFragment();
+          tn.textContent.split(/(\s+)/).forEach((w, i) => {
+            if (/\s+/.test(w)) { frag.appendChild(document.createTextNode(w)); return; }
+            const s = document.createElement('span');
+            s.className = 'word';
+            s.textContent = w;
+            s.style.transitionDelay = (i * 0.08) + 's';
+            frag.appendChild(s);
+          });
+          tn.parentNode.replaceChild(frag, tn);
+        });
+        // Re-trigger visible after wrapping
+        requestAnimationFrame(() => e.target.classList.add('visible'));
+      }
+      multiObs.unobserve(e.target);
     }
   });
-}, { threshold: 0.3 });
-document.querySelectorAll('[data-scramble]').forEach(el => scrambleObs.observe(el));
+}, { threshold: 0.2 });
+document.querySelectorAll('.blur-focus, .grad-flow, .card-sweep').forEach(el => multiObs.observe(el));
 
-// ========== SCAN REVEAL SWEEP ==========
-const scanObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('active');
-      scanObs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.5 });
-document.querySelectorAll('.scan-reveal').forEach(el => scanObs.observe(el));
-
-// ========== MATRIX RAIN CANVAS ==========
+// ========== MATRIX RAIN CANVAS (subtler) ==========
 (function initMatrix() {
   const canvas = document.getElementById('matrix-canvas');
   if (!canvas) return;

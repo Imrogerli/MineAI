@@ -64,6 +64,41 @@ body{font-family:'Inter',sans-serif;overflow-x:hidden;background:#060a14;color:#
 .reveal.visible{opacity:1;transform:translateY(0)}
 .reveal-d1{transition-delay:0.1s}.reveal-d2{transition-delay:0.2s}.reveal-d3{transition-delay:0.3s}.reveal-d4{transition-delay:0.4s}
 
+/* === AI DECODE / SCRAMBLE TEXT === */
+.scramble-text .char{display:inline-block;transition:transform 0.1s}
+.scramble-text .char.decoding{color:#22d3ee;text-shadow:0 0 8px rgba(34,211,238,0.5)}
+
+/* === TYPEWRITER === */
+.typewriter{overflow:hidden;white-space:nowrap;border-right:2px solid #22d3ee;width:0;animation:typeExpand 3s steps(60,end) 1s forwards,blinkCaret 0.6s step-end infinite}
+@keyframes typeExpand{from{width:0}to{width:100%}}
+@keyframes blinkCaret{50%{border-color:transparent}}
+
+/* === GLITCH HOVER === */
+.glitch-hover{position:relative}
+.glitch-hover:hover{animation:glitchShake 0.3s linear}
+.glitch-hover::before,.glitch-hover::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;pointer-events:none}
+.glitch-hover:hover::before{opacity:1;color:#22d3ee;clip-path:polygon(0 0,100% 0,100% 33%,0 33%);transform:translateX(-2px);animation:glitchSlice 0.3s linear}
+.glitch-hover:hover::after{opacity:1;color:#a78bfa;clip-path:polygon(0 67%,100% 67%,100% 100%,0 100%);transform:translateX(2px);animation:glitchSlice 0.3s linear reverse}
+@keyframes glitchShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-2px)}40%{transform:translateX(2px)}60%{transform:translateX(-1px)}80%{transform:translateX(1px)}}
+@keyframes glitchSlice{0%{clip-path:polygon(0 0,100% 0,100% 20%,0 20%)}25%{clip-path:polygon(0 40%,100% 40%,100% 60%,0 60%)}50%{clip-path:polygon(0 10%,100% 10%,100% 45%,0 45%)}75%{clip-path:polygon(0 55%,100% 55%,100% 85%,0 85%)}100%{clip-path:polygon(0 0,100% 0,100% 33%,0 33%)}}
+
+/* === SCAN REVEAL (text highlight sweep) === */
+.scan-reveal{position:relative;display:inline-block}
+.scan-reveal::after{content:'';position:absolute;top:0;left:-10%;width:20%;height:100%;background:linear-gradient(90deg,transparent,rgba(34,211,238,0.15),transparent);transform:skewX(-15deg);opacity:0}
+.scan-reveal.active::after{opacity:1;animation:scanSweep 1.2s ease-out forwards}
+@keyframes scanSweep{0%{left:-20%}100%{left:120%}}
+
+/* === MATRIX CANVAS === */
+#matrix-canvas{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.06;pointer-events:none;z-index:0}
+
+/* === FLOATING PARTICLES === */
+.particle{position:absolute;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(34,211,238,0.12);pointer-events:none;animation:particleFloat 8s linear infinite}
+@keyframes particleFloat{0%{transform:translateY(0) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-400px) rotate(180deg);opacity:0}}
+
+/* === PULSE DOT on timeline === */
+.pulse-dot{position:relative}
+.pulse-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(6,182,212,0.4);animation:pulseRing 2s ease-out infinite}
+
 /* Scrollbar */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:#0a0f1a}
@@ -129,7 +164,8 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 </nav>
 
 <!-- ===== HERO ===== -->
-<section class="hero-glow min-h-screen flex flex-col items-center justify-center pt-24 pb-20 px-5 relative">
+<section class="hero-glow min-h-screen flex flex-col items-center justify-center pt-24 pb-20 px-5 relative overflow-hidden">
+  <canvas id="matrix-canvas"></canvas>
   <div class="max-w-4xl mx-auto text-center relative z-10">
     <!-- Badge -->
     <div class="reveal flex justify-center mb-6">
@@ -139,7 +175,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
       </div>
     </div>
 
-    <h1 class="reveal text-4xl sm:text-5xl md:text-7xl font-black text-white leading-[1.08] mb-6 tracking-tight">
+    <h1 class="reveal text-4xl sm:text-5xl md:text-7xl font-black text-white leading-[1.08] mb-6 tracking-tight" data-scramble>
       Your AI discovers. Executes. <br/><span class="grad-text">You earn — zero cost.</span>
     </h1>
 
@@ -184,7 +220,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 <section id="how" class="py-24 px-5">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4">Three steps. Zero effort.</h2>
+      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4 scan-reveal" data-scramble>Three steps. Zero effort.</h2>
       <p class="reveal text-slate-400 text-lg max-w-xl mx-auto">No capital needed. No complex setup. Your AI does the work — you collect the rewards.</p>
     </div>
 
@@ -195,7 +231,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
         <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         </div>
-        <h3 class="text-xl font-bold text-white mb-3">Install the Skill</h3>
+        <h3 class="text-xl font-bold text-white mb-3 glitch-hover" data-text="Install the Skill">Install the Skill</h3>
         <p class="text-slate-400 text-sm leading-relaxed">Add MineAI to your Claude Desktop, ChatGPT, or any MCP-compatible AI tool. One config, done in 10 seconds.</p>
       </div>
 
@@ -205,7 +241,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
         <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
         </div>
-        <h3 class="text-xl font-bold text-white mb-3">AI Discovers & Executes</h3>
+        <h3 class="text-xl font-bold text-white mb-3 glitch-hover" data-text="AI Discovers & Executes">AI Discovers & Executes</h3>
         <p class="text-slate-400 text-sm leading-relaxed">Your AI automatically discovers Web3 opportunities — airdrops, games, tasks — and executes them on your behalf. You also get a daily intelligence capsule.</p>
       </div>
 
@@ -215,7 +251,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
         <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-5">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
-        <h3 class="text-xl font-bold text-white mb-3">Earn Rewards Automatically</h3>
+        <h3 class="text-xl font-bold text-white mb-3 glitch-hover" data-text="Earn Rewards Automatically">Earn Rewards Automatically</h3>
         <p class="text-slate-400 text-sm leading-relaxed">Every action your AI takes earns points. Keep your streak alive for bonus multipliers. Redeem for $MINE at airdrop.</p>
       </div>
     </div>
@@ -229,7 +265,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
       <!-- Left: Text -->
       <div>
         <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-6 leading-tight">
-          Auto-discover. <br/><span class="grad-text-warm">Auto-earn.</span>
+          <span data-scramble>Auto-discover.</span> <br/><span class="grad-text-warm" data-scramble>Auto-earn.</span>
         </h2>
         <p class="reveal text-slate-400 text-lg mb-8 leading-relaxed">
           AI scans thousands of sources 24/7 and distills the one thing you need to know today. Personalized to your interests — tech, business, markets, crypto, or all of the above.
@@ -331,7 +367,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 <section id="points" class="py-24 px-5">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4">Stack points. <span class="grad-text">Earn $MINE.</span></h2>
+      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4 scan-reveal">Stack points. <span class="grad-text" data-scramble>Earn $MINE.</span></h2>
       <p class="reveal text-slate-400 text-lg max-w-xl mx-auto">The earlier you join, the more you earn. Points convert to $MINE tokens at airdrop.</p>
     </div>
 
@@ -384,7 +420,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 <section id="platforms" class="py-24 px-5 relative">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4">Works where you already are.</h2>
+      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4" data-scramble>Works where you already are.</h2>
       <p class="reveal text-slate-400 text-lg max-w-xl mx-auto">No new app to download. MineAI lives inside the AI tools you use every day.</p>
     </div>
 
@@ -446,7 +482,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 <section class="py-24 px-5">
   <div class="max-w-4xl mx-auto">
     <div class="text-center mb-16">
-      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4">Road to <span class="grad-text">$MINE</span></h2>
+      <h2 class="reveal text-3xl md:text-5xl font-black text-white mb-4 scan-reveal">Road to <span class="grad-text" data-scramble>$MINE</span></h2>
       <p class="reveal text-slate-400 text-lg">Accumulate points now. Airdrop is coming.</p>
     </div>
 
@@ -461,7 +497,7 @@ nav{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
           <h3 class="text-white font-bold text-xl mb-2">Phase 1: Points Mining</h3>
           <p class="text-slate-400 text-sm leading-relaxed">Install MineAI, receive daily capsules, earn points. Early bird 3x multiplier active for first 10K users.</p>
         </div>
-        <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-6 h-6 rounded-full bg-cyan-500 border-4 border-[#060a14] shadow-lg shadow-cyan-500/30"></div>
+        <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-6 h-6 rounded-full bg-cyan-500 border-4 border-[#060a14] shadow-lg shadow-cyan-500/30 pulse-dot"></div>
       </div>
 
       <!-- Phase 2 -->
@@ -587,6 +623,131 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   });
 });
+
+// ========== TEXT SCRAMBLE / DECODE EFFECT ==========
+const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*<>{}[]';
+function scrambleText(el) {
+  // Get only direct text nodes, preserve child elements
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  let node;
+  while (node = walker.nextNode()) {
+    if (node.textContent.trim().length > 0) textNodes.push(node);
+  }
+  textNodes.forEach(textNode => {
+    const original = textNode.textContent;
+    const span = document.createElement('span');
+    span.className = 'scramble-text';
+    original.split('').forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.className = 'char';
+      s.dataset.final = ch;
+      s.textContent = ch === ' ' ? '\u00A0' : chars[Math.floor(Math.random() * chars.length)];
+      s.style.opacity = '0.3';
+      span.appendChild(s);
+    });
+    textNode.parentNode.replaceChild(span, textNode);
+    // Animate each char
+    const charEls = span.querySelectorAll('.char');
+    charEls.forEach((s, i) => {
+      const final = s.dataset.final;
+      if (final === ' ') { s.textContent = '\u00A0'; s.style.opacity = '1'; return; }
+      let iterations = 0;
+      const maxIterations = 3 + Math.random() * 5;
+      const delay = i * 30 + Math.random() * 60;
+      setTimeout(() => {
+        const interval = setInterval(() => {
+          if (iterations >= maxIterations) {
+            clearInterval(interval);
+            s.textContent = final;
+            s.classList.remove('decoding');
+            s.style.opacity = '1';
+            return;
+          }
+          s.textContent = chars[Math.floor(Math.random() * chars.length)];
+          s.classList.add('decoding');
+          s.style.opacity = '1';
+          iterations++;
+        }, 40);
+      }, delay);
+    });
+  });
+}
+
+// Trigger scramble on scroll-reveal
+const scrambleObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      scrambleText(e.target);
+      scrambleObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('[data-scramble]').forEach(el => scrambleObs.observe(el));
+
+// ========== SCAN REVEAL SWEEP ==========
+const scanObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('active');
+      scanObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.scan-reveal').forEach(el => scanObs.observe(el));
+
+// ========== MATRIX RAIN CANVAS ==========
+(function initMatrix() {
+  const canvas = document.getElementById('matrix-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, columns, drops;
+  const matrixChars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノ<>{}[]$#@%&MINE';
+  function resize() {
+    w = canvas.width = canvas.parentElement.offsetWidth;
+    h = canvas.height = canvas.parentElement.offsetHeight;
+    columns = Math.floor(w / 18);
+    drops = Array(columns).fill(1).map(() => Math.random() * -100);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  function draw() {
+    ctx.fillStyle = 'rgba(6, 10, 20, 0.15)';
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = '#06b6d4';
+    ctx.font = '12px JetBrains Mono, monospace';
+    for (let i = 0; i < drops.length; i++) {
+      const ch = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+      const x = i * 18;
+      const y = drops[i] * 18;
+      ctx.globalAlpha = 0.3 + Math.random() * 0.4;
+      ctx.fillText(ch, x, y);
+      if (y > h && Math.random() > 0.98) drops[i] = 0;
+      drops[i] += 0.4 + Math.random() * 0.3;
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ========== FLOATING PARTICLES in Hero ==========
+(function initParticles() {
+  const hero = document.querySelector('.hero-glow');
+  if (!hero) return;
+  const symbols = ['0','1','AI','$','#','{}','<>','//','fn','0x','>>','::'];
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.bottom = '-20px';
+    p.style.animationDuration = (6 + Math.random() * 6) + 's';
+    p.style.fontSize = (8 + Math.random() * 6) + 'px';
+    hero.appendChild(p);
+    p.addEventListener('animationend', () => p.remove());
+  }
+  setInterval(spawnParticle, 800);
+})();
 </script>
 </body>
 </html>
